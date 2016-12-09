@@ -1,6 +1,7 @@
-# work in progress
+# !! work in progress !!
+
 ## Retinex for MRI
-Currently wverthing is highly experimental.
+Currently everything is highly experimental.
 
 ## Dependencies
 
