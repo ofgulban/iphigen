@@ -17,7 +17,8 @@ def MultiScaleRetinex_3D(image, scales=[1, 10, 30]):
     for i, sigma in enumerate(scales):
         print '.'
         msr[:, :, :, i] = np.log(image + 1) \
-            - np.log(gaussian_filter(image, sigma) + 1)
+            - np.log(gaussian_filter(image, sigma, mode="constant", cval=0.0)
+                     + 1)
     # remove nans
     msr = np.nan_to_num(msr)
     # weighted sum

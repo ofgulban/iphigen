@@ -10,9 +10,9 @@ np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/media/Data_Drive/test4/S05_SES1_T1_pt5_DIF.nii')
-vol2 = load('/media/Data_Drive/test4/S05_T2s-TO-T1_pt5_DIF.nii')
-vol3 = load('/media/Data_Drive/test4/S05_SES1_PD_pt5_DIF.nii')
+vol1 = load('/media/Data_Drive/RGB_to_HSL/Valentin/S1/T1_g_u.nii.gz')
+vol2 = load('/media/Data_Drive/RGB_to_HSL/Valentin/S1/PD_g_u.nii.gz')
+vol3 = load('/media/Data_Drive/RGB_to_HSL/Valentin/S1/PD_g_u.nii.gz')
 
 basename_vol1 = vol1.get_filename().split(os.extsep, 1)[0]
 basename_vol2 = vol2.get_filename().split(os.extsep, 1)[0]
@@ -84,7 +84,7 @@ save(out, basename_vol3 + '_MSRCP.nii.gz')
 
 print "Done."
 
-# # Extension ----- Apply retinex on T1w ----------------------------------------
+# Extension ----- Apply retinex on T1w ----------------------------------------
 #
 # red = rgb[:, :, :, 0]
 # red = MultiScaleRetinex(red, scales=[2, 10, 20])
