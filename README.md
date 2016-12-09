@@ -10,6 +10,7 @@ Currently everything is highly experimental.
 | Package                              | Tested version |
 |--------------------------------------|----------------|
 | [NumPy](http://www.numpy.org/)       | 1.11.1         |
+| [SciPy](https://www.scipy.org/)      | 0.18.0         |
 | [NiBabel](http://nipy.org/nibabel/)  | 2.1.0          |
 
 ## License
