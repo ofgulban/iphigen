@@ -5,7 +5,7 @@ import os
 import numpy as np
 from nibabel import load, save, Nifti1Image
 from AutoScale import AutoScale
-from rgb2hsl import rgb2hsl, hsl2rgb
+from conversions import rgb2hsl, hsl2rgb
 np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
