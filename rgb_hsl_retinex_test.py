@@ -4,8 +4,7 @@ from __future__ import division
 import os
 import numpy as np
 from nibabel import load, save, Nifti1Image
-from AutoScale import AutoScale
-from conversions import rgb2hsl, hsl2rgb
+from conversions import rgb2hsl, hsl2rgb, AutoScale
 from retinex import MultiScaleRetinex_3D
 np.seterr(divide='ignore', invalid='ignore')
 
