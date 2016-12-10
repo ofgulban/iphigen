@@ -1,4 +1,10 @@
-"""Pseudo-color test for mri data."""
+"""Pseudo-color test for mri data.
+
+Caution!
+    If you get a nibabel error about slope / inter range, this is due to nifti
+    the headers. A workaround is to run fslmaths -range on the nifti files
+    beforehand.
+"""
 
 from __future__ import division
 import os
@@ -10,16 +16,16 @@ np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/media/Data_Drive/RGB_to_HSL/Valentin/S1/T1_g_u.nii.gz')
-vol2 = load('/media/Data_Drive/RGB_to_HSL/Valentin/S1/PD_g_u.nii.gz')
-vol3 = load('/media/Data_Drive/RGB_to_HSL/Valentin/S1/PD_g_u.nii.gz')
+vol1 = load('/home/faruk/Data/retinex_tests/valentin/T1_SG_ANISO.nii.gz')
+vol2 = load('/home/faruk/Data/retinex_tests/valentin/PD_SG_ANISO.nii.gz')
+vol3 = load('/home/faruk/Data/retinex_tests/valentin/PD_SG_ANISO.nii.gz')
 
 basename_vol1 = vol1.get_filename().split(os.extsep, 1)[0]
 basename_vol2 = vol2.get_filename().split(os.extsep, 1)[0]
 basename_vol3 = vol3.get_filename().split(os.extsep, 1)[0]
 
 dirname = os.path.dirname(vol1.get_filename())
-niiHeader, niiAffine = vol1.get_header(), vol1.get_affine()
+niiHeader, niiAffine = vol1.header, vol1.affine
 shape = vol1.shape + (3,)
 
 # Preprocess
@@ -28,11 +34,11 @@ vol2 = AutoScale(vol2.get_data(), percMin=0.1, percMax=100, zeroTo=1.0)
 vol3 = AutoScale(vol3.get_data(), percMin=0.1, percMax=100, zeroTo=1.0)
 
 rgb = np.zeros(shape)
-rgb[:, :, :, 0] = vol1
+rgb[:, :, :, 0] = np.nan_to_num(vol1)
 del vol1
-rgb[:, :, :, 1] = vol2
+rgb[:, :, :, 1] = np.nan_to_num(vol2)
 del vol2
-rgb[:, :, :, 2] = vol3
+rgb[:, :, :, 2] = np.nan_to_num(vol3)
 del vol3
 
 # RGB to HSL
@@ -42,13 +48,13 @@ hsl = hsl.reshape(shape)
 
 out = Nifti1Image(np.squeeze(hsl[:, :, :, 0]),
                   header=niiHeader, affine=niiAffine)
-save(out, os.path.join(dirname, 'TEST_hue.nii.gz'))
+save(out, basename_vol1 + '_hue.nii.gz')
 out = Nifti1Image(np.squeeze(hsl[:, :, :, 1]),
                   header=niiHeader, affine=niiAffine)
-save(out, os.path.join(dirname, 'TEST_sat.nii.gz'))
+save(out, basename_vol1 + '_sat.nii.gz')
 out = Nifti1Image(np.squeeze(hsl[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
-save(out, os.path.join(dirname, 'TEST_lum.nii.gz'))
+save(out, basename_vol1 + '_lum.nii.gz')
 print 'RGB to HSL conversion is done.'
 
 # MSRCP (multiscale retinex with colour preservation)
@@ -58,7 +64,7 @@ lum = AutoScale(lum, percMin=0, percMax=100)
 
 out = Nifti1Image(np.squeeze(lum),
                   header=niiHeader, affine=niiAffine)
-save(out, os.path.join(dirname, 'TEST_lum_msr.nii.gz'))
+save(out, basename_vol1 + '_lum_msr.nii.gz')
 print 'MSR on luminance is done.'
 
 hsl[:, :, :, 2] = lum
@@ -77,7 +83,7 @@ out = Nifti1Image(np.squeeze(rgb[:, :, :, 0]),
 save(out, basename_vol1 + '_MSRCP.nii.gz')
 out = Nifti1Image(np.squeeze(rgb[:, :, :, 1]),
                   header=niiHeader, affine=niiAffine)
-save(out, basename_vol2 + '_MSRCP.nii.gz')
+save(out, basename_vol2 + '_MSRCP.nii.gz', )
 out = Nifti1Image(np.squeeze(rgb[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol3 + '_MSRCP.nii.gz')
