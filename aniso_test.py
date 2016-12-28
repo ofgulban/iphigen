@@ -6,7 +6,7 @@ from aniso import anisodiff3
 
 """Load Data"""
 #
-nii = load('/home/faruk/Data/retinex_tests/valentin/T1_SG.nii.gz')
+nii = load('/home/faruk/Data/Faruk/T2s.nii.gz')
 
 basename_vol1 = nii.get_filename().split(os.extsep, 1)[0]
 dirname = os.path.dirname(nii.get_filename())
@@ -14,7 +14,7 @@ niiHeader, niiAffine = nii.header, nii.affine
 
 data = nii.get_data()
 
-test = anisodiff3(data, niter=2, kappa=100, gamma=0.2, option=1)
+test = anisodiff3(data, niter=2, kappa=100, gamma=0.1, option=1)
 # test = anisodiff3(data, niter=2, kappa=70, gamma=0.2, option=1)
 # test = anisodiff3(data*255, niter=1, kappa=50, gamma=0.1, option=1)
 
