@@ -26,8 +26,8 @@ def MultiScaleRetinex_3D(image, scales=[1, 10, 30]):
     msr: 3d numpy array
         Corrected image.
 
-
-    References:
+    References
+    ----------
     [1] https://github.com/scipy/scipy/blob/v0.16.1/scipy/ndimage/filters.py#L251
 
     [2] Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997).
