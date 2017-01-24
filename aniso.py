@@ -1,4 +1,4 @@
-"""3D anisotropic diffusion code.
+"""3D anisotropic diffusion filter code.
 
 This script is taken from stackoverflow user ali_m:
 [1] http://stackoverflow.com/questions/10802611/anisotropic-diffusion-2d-images
@@ -7,6 +7,7 @@ This script is taken from stackoverflow user ali_m:
 """
 
 import numpy as np
+import warnings
 
 
 def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
@@ -14,63 +15,65 @@ def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
         """
         3D Anisotropic diffusion.
 
-        Usage:
-        stackout = anisodiff(stack, niter, kappa, gamma, option)
-
-        Arguments:
-                stack  - input stack
-                niter  - number of iterations
-                kappa  - conduction coefficient 20-100 ?
-                gamma  - max value of .25 for stability
-                step   - tuple, the distance between adjacent pixels in (z,y,x)
-                option - 1 Perona Malik diffusion equation No 1
-                         2 Perona Malik diffusion equation No 2
-                ploton - if True, the middle z-plane will be plotted on every
-                         iteration
+        Parameters
+        ----------
+        stack : 3d numpy array
+            Input stack/image/volume/data.
+        niter : int
+            Number of iterations
+        kappa : float
+            Conduction coefficient (20-100?). Controls conduction as a
+            function of gradient.  If kappa is low small intensity
+            gradients are able to block conduction and hence diffusion
+            across step edges.  A large value reduces the influence of
+            intensity gradients on conduction.
+        gamma : float
+            Controls speed of diffusion (you usually want it at a
+            maximum of 0.25 for stability).
+        step : tuple
+            The distance between adjacent pixels in (z,y,x). Step is
+            used to scale the gradients in case the spacing between
+            adjacent pixels differs in the x,y and/or z axes.
+        option : int, 1 or 2
+            1 favours high contrast edges over low contrast ones
+            (Perona & Malik [1] diffusion equation No 1).
+            2 favours wide regions over smaller ones
+            (Perona & Malik [1] diffusion equation No 2).
+        ploton : bool
+            if True, the middle z-plane will be plotted on every
+            iteration/
 
         Returns:
-                stackout   - diffused stack.
+        stackout : 3d numpy array
+            Diffused stack/image/volume/data.
 
-        kappa controls conduction as a function of gradient.  If kappa is low
-        small intensity gradients are able to block conduction and hence
-        diffusion across step edges.  A large value reduces the influence of
-        intensity gradients on conduction.
-
-        gamma controls speed of diffusion (you usually want it at a maximum of
-        0.25)
-
-        step is used to scale the gradients in case the spacing between
-        adjacent pixels differs in the x,y and/or z axes
-
-        Diffusion equation 1 favours high contrast edges over low contrast
-        ones.
-        Diffusion equation 2 favours wide regions over smaller ones.
-
-        Reference:
-        P. Perona and J. Malik.
-        Scale-space and edge detection using ansotropic diffusion.
-        IEEE Transactions on Pattern Analysis and Machine Intelligence,
-        12(7):629-639, July 1990.
+        Reference
+        ---------
+        [1] P. Perona and J. Malik.
+            Scale-space and edge detection using ansotropic diffusion.
+            IEEE Transactions on Pattern Analysis and Machine
+            Intelligence, 12(7):629-639, July 1990.
 
         Original MATLAB code by Peter Kovesi
-        School of Computer Science & Software Engineering
+        School of Computer Science & Software Engineering,
         The University of Western Australia
-        pk @ csse uwa edu au
         <http://www.csse.uwa.edu.au>
 
         Translated to Python and optimised by Alistair Muldal
-        Department of Pharmacology
-        University of Oxford
+        Department of Pharmacology, University of Oxford
         <alistair.muldal@pharm.ox.ac.uk>
 
         June 2000  original version.
         March 2002 corrected diffusion eqn No 2.
         July 2012 translated to Python
+        January 2017 docstring reorganization.
+
         """
         # ...you could always diffuse each color channel independently if you
         # really want
         if stack.ndim == 4:
-                warnings.warn("Only grayscale stacks allowed, converting to 3D matrix")
+                warnings.warn("Only grayscale stacks allowed, converting to 3D \
+                              matrix")
                 stack = stack.mean(3)
 
         # initialize output array
@@ -91,7 +94,6 @@ def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
         # create the plot figure, if requested
         if ploton:
             import pylab as pl
-            from time import sleep
 
             showplane = stack.shape[0]//2
 
