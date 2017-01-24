@@ -8,7 +8,7 @@ np.seterr(divide='ignore', invalid='ignore')
 
 
 def MultiScaleRetinex_3D(image, scales=[1, 10, 30]):
-    u"""Multi scale retinex for 3 dimensional images.
+    """Multi scale retinex for 3 dimensional images.
 
     Parameters
     ----------
@@ -33,7 +33,7 @@ def MultiScaleRetinex_3D(image, scales=[1, 10, 30]):
     [2] Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997).
     A multiscale retinex for bridging the gap between color images and
     the human observation of scenes. IEEE Transactions on Image
-    Processing, 6(7), 965–976. DOI: 10.1109/83.597272
+    Processing, 6(7), 965-976. DOI: 10.1109/83.597272
 
     """
     start = time.time()
