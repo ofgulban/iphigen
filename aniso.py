@@ -12,8 +12,7 @@ import warnings
 
 def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
                option=1, ploton=False):
-        """
-        3D Anisotropic diffusion.
+        """3D Anisotropic diffusion.
 
         Parameters
         ----------
