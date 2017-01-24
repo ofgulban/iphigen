@@ -1,7 +1,7 @@
-# !! work in progress !!
+## Retinex for MRI (work in progress)
 
-## Retinex for MRI
-Currently everything is highly experimental.
+Currently this package is not intended for general use. However if you do use it and find it useful you can use the zenodo DOI:
+[![DOI](https://zenodo.org/badge/76043117.svg)](https://zenodo.org/badge/latestdoi/76043117)
 
 ## Dependencies
 
