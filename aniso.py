@@ -43,7 +43,8 @@ def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
             if True, the middle z-plane will be plotted on every
             iteration/
 
-        Returns:
+        Returns
+        -------
         stackout : 3d numpy array
             Diffused stack/image/volume/data.
 
@@ -54,6 +55,8 @@ def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
             IEEE Transactions on Pattern Analysis and Machine
             Intelligence, 12(7):629-639, July 1990.
 
+        Notes
+        -----
         Original MATLAB code by Peter Kovesi
         School of Computer Science & Software Engineering,
         The University of Western Australia
@@ -64,7 +67,7 @@ def anisodiff3(stack, niter=1, kappa=50, gamma=0.1, step=(1., 1., 1.),
         <alistair.muldal@pharm.ox.ac.uk>
 
         June 2000  original version.
-        March 2002 corrected diffusion eqn No 2.
+        March 2002 corrected diffusion equation No 2.
         July 2012 translated to Python
         January 2017 docstring reorganization.
 
