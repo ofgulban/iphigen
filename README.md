@@ -3,7 +3,7 @@
 ## Retinex for MRI (work in progress)
 
 Currently this package is not intended for general use. However if you do use it and find it useful cite it with the Zenodo DOI:  
-* Omer Faruk Gulban, 2017. Retinex for MRI v0.1.1. doi:10.5281/zenodo.259401
+* Omer Faruk Gulban, 2017. Retinex for MRI v0.2.0. doi:10.5281/zenodo.259401
 
 ## Dependencies
 
