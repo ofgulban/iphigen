@@ -5,13 +5,16 @@ To install, using the commandline do:
 
 """
 
-from setuptools import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 setup(name='retinex_for_mri',
       version='0.2.0',
       description='Retinex algorithm for MRI data.',
       url='https://github.com/ofgulban/retinex_for_mri',
-      download_url='https://github.com/ofgulban/retinex_for_mri/releases/tag/0.2.2',
+      download_url='https://github.com/ofgulban/retinex_for_mri/releases/tag/0.2.4',
       author='Omer Faruk Gulban',
       author_email='',
       license='GNU Geneal Public License Version 3',
