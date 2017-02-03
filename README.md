@@ -23,7 +23,7 @@ pip install -e /path/to/retinex_for_mri
 ```
 
 **NOTE:** This repository is still in development and example scripts prefixed with **wip** are not yet prepared for general usage.  
-*However*, if you would like to use the core functions please see the [dosctrings](https://en.wikipedia.org/wiki/Docstring) of [**retinex.py**](https://github.com/ofgulban/retinex_for_mri/blob/master/retinex.py) or [**aniso.py**](https://github.com/ofgulban/retinex_for_mri/blob/master/aniso.py) at ```~/retinex_for_mri/```.
+*However*, if you would like to use the core functions please see the [dosctrings](https://en.wikipedia.org/wiki/Docstring) of [**core.py**](retinex_for_mri/core.py) or [**filters.py**](retinex_for_mri/filters.py).
 
 ## Support
 
