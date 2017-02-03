@@ -13,10 +13,15 @@ Currently this package is not intended for general use. However if you do use it
 | [SciPy](https://www.scipy.org/)      | 0.18.0         |
 | [NiBabel](http://nipy.org/nibabel/)  | 2.1.0          |
 
-## Usage
+## Installation & Usage
 
-This repository is still in development and most scripts are not yet prepared for general usage.  
-*However*, if you would like to use the core functions please see the [dosctrings](https://en.wikipedia.org/wiki/Docstring) of [**retinex.py**](https://github.com/ofgulban/retinex_for_mri/blob/master/retinex.py) or [**aniso.py**](https://github.com/ofgulban/retinex_for_mri/blob/master/aniso.py)
+To install, simply clone the repository or download the latest release and run the following on your command line:
+```
+pip install -e /path/to/retinex_for_mri
+```
+
+**NOTE:** This repository is still in development and example scripts prefixed with **wip** are not yet prepared for general usage.  
+*However*, if you would like to use the core functions please see the [dosctrings](https://en.wikipedia.org/wiki/Docstring) of [**retinex.py**](https://github.com/ofgulban/retinex_for_mri/blob/master/retinex.py) or [**aniso.py**](https://github.com/ofgulban/retinex_for_mri/blob/master/aniso.py) at ```~/retinex_for_mri/```.
 
 ## Support
 
