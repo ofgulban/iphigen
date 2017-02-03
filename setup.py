@@ -15,4 +15,5 @@ setup(name='retinex_for_mri',
       author_email='',
       license='GNU Geneal Public License Version 3',
       packages=['retinex_for_mri'],
+      install_requires=['numpy', 'scipy', 'nibabel'],
       zip_safe=False)
