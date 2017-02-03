@@ -1,4 +1,4 @@
-"""Pseudo-color test for mri data.
+"""!!! WIP !!! Pseudo-color test for mri data.
 
 Caution!
     If you get a nibabel error about slope / inter range, this is due to nifti
@@ -10,15 +10,16 @@ from __future__ import division
 import os
 import numpy as np
 from nibabel import load, save, Nifti1Image
-from conversions import rgb2hsl, hsl2rgb, AutoScale
-from retinex import MultiScaleRetinex_3D
+from retinex_for_mri.core import MultiScaleRetinex_3D
+from retinex_for_mri.conversions import rgb2hsl, hsl2rgb
+from retinex_for_mri.utils import truncate_and_scale
 np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/home/faruk/Data/retinex_tests/valentin/T1_SG_ANISO.nii.gz')
-vol2 = load('/home/faruk/Data/retinex_tests/valentin/PD_SG_ANISO.nii.gz')
-vol3 = load('/home/faruk/Data/retinex_tests/valentin/PD_SG_ANISO.nii.gz')
+vol1 = load('/media/Data_Drive/Segmentator_Data/Sri/orig/inv1_mp2rage.nii.gz')
+vol2 = load('/media/Data_Drive/Segmentator_Data/Sri/orig/inv2_mp2rage.nii.gz')
+vol3 = load('/media/Data_Drive/Segmentator_Data/Sri/orig/uni_mp2rage.nii.gz')
 
 basename_vol1 = vol1.get_filename().split(os.extsep, 1)[0]
 basename_vol2 = vol2.get_filename().split(os.extsep, 1)[0]
@@ -29,9 +30,9 @@ niiHeader, niiAffine = vol1.header, vol1.affine
 shape = vol1.shape + (3,)
 
 # Preprocess
-vol1 = AutoScale(vol1.get_data(), percMin=0.1, percMax=100, zeroTo=1.0)
-vol2 = AutoScale(vol2.get_data(), percMin=0.1, percMax=100, zeroTo=1.0)
-vol3 = AutoScale(vol3.get_data(), percMin=0.1, percMax=100, zeroTo=1.0)
+vol1 = truncate_and_scale(vol1.get_data(), percMin=0, percMax=100, zeroTo=1.0)
+vol2 = truncate_and_scale(vol2.get_data(), percMin=0, percMax=100, zeroTo=1.0)
+vol3 = truncate_and_scale(vol3.get_data(), percMin=0, percMax=100, zeroTo=1.0)
 
 rgb = np.zeros(shape)
 rgb[:, :, :, 0] = np.nan_to_num(vol1)
@@ -60,7 +61,7 @@ print 'RGB to HSL conversion is done.'
 # MSRCP (multiscale retinex with colour preservation)
 lum = hsl[:, :, :, 2]
 lum = MultiScaleRetinex_3D(lum, scales=[1, 3, 10])
-lum = AutoScale(lum, percMin=0, percMax=100)
+lum = truncate_and_scale(lum, percMin=0, percMax=100)
 
 out = Nifti1Image(np.squeeze(lum),
                   header=niiHeader, affine=niiAffine)
@@ -94,7 +95,7 @@ print "Done."
 #
 # red = rgb[:, :, :, 0]
 # red = MultiScaleRetinex(red, scales=[2, 10, 20])
-# # red = AutoScale(red, percMin=0, percMax=100)
+# # red = truncate_and_scale(red, percMin=0, percMax=100)
 # red = red*500
 #
 # out = Nifti1Image(np.squeeze(red),

@@ -1,10 +1,11 @@
-"""Pseudo-color test for mri data."""
+"""!!! WIP !!! Pseudo-color test for mri data."""
 
 from __future__ import division
 import os
 import numpy as np
 from nibabel import load, save, Nifti1Image
-from conversions import rgb2hsl, hsl2rgb, AutoScale
+from retinex_for_mri.conversions import rgb2hsl, hsl2rgb
+from retinex_for_mri.utils import truncate_and_scale
 np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
@@ -19,9 +20,9 @@ niiHeader, niiAffine = vol1.get_header(), vol1.get_affine()
 shape = vol1.shape + (3,)
 
 # Preprocess
-vol1 = AutoScale(vol1.get_data(), percMin=0.1, percMax=99.0, zeroTo=1.0)
-vol2 = AutoScale(vol2.get_data(), percMin=0.1, percMax=99.0, zeroTo=1.0)
-vol3 = AutoScale(vol3.get_data(), percMin=0.1, percMax=99.0, zeroTo=1.0)
+vol1 = truncate_and_scale(vol1.get_data(), percMin=0.1, percMax=99.0)
+vol2 = truncate_and_scale(vol2.get_data(), percMin=0.1, percMax=99.0)
+vol3 = truncate_and_scale(vol3.get_data(), percMin=0.1, percMax=99.0)
 
 rgb = np.zeros(shape)
 rgb[:, :, :, 0] = vol1

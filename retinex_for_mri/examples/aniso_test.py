@@ -4,6 +4,8 @@ import os
 from nibabel import load, save, Nifti1Image
 from aniso import anisodiff3
 
+import retinex_for_mri
+
 """Load Data"""
 #
 nii = load('/home/faruk/Data/Faruk/T2s.nii.gz')

@@ -132,21 +132,3 @@ def hsl2rgb(data):
     rgb[sat > 0, 2] = temp_B[sat > 0]
 
     return rgb
-
-
-def AutoScale(data, percMin=0.01, percMax=99.9, zeroTo=1.0):
-    """To truncate or scale the data if needed."""
-    data = np.squeeze(data)
-
-    # adjust minimum
-    percDataMin = np.percentile(data, percMin)
-    data[np.where(data < percDataMin)] = percDataMin
-    data = data - data.min()
-
-    # adjust maximum
-    percDataMax = np.percentile(data, percMax)
-    data[np.where(data > percDataMax)] = percDataMax
-    data = 1.0/data.max() * data
-    data = data * zeroTo
-
-    return data
