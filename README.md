@@ -1,4 +1,7 @@
 [![DOI](https://zenodo.org/badge/76043117.svg)](https://zenodo.org/badge/latestdoi/76043117)
+[![Anaconda-Server Badge](https://anaconda.org/ofgulban/retinex_for_mri/badges/version.svg)](https://anaconda.org/ofgulban/retinex_for_mri)
+[![PyPI version](https://badge.fury.io/py/retinex_for_mri.svg)](https://badge.fury.io/py/retinex_for_mri)
+
 
 ## Retinex for MRI (work in progress)
 
