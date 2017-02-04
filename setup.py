@@ -11,7 +11,7 @@ except ImportError:
     from distutils.core import setup
 
 setup(name='retinex_for_mri',
-      version='0.2.7',
+      version='0.2.8',
       description='Retinex algorithm for MRI data.',
       url='https://github.com/ofgulban/retinex_for_mri',
       download_url='https://github.com/ofgulban/retinex_for_mri/archive/0.2.8.tar.gz',
