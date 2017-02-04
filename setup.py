@@ -11,10 +11,10 @@ except ImportError:
     from distutils.core import setup
 
 setup(name='retinex_for_mri',
-      version='0.2.8',
+      version='0.2.9',
       description='Retinex algorithm for MRI data.',
       url='https://github.com/ofgulban/retinex_for_mri',
-      download_url='https://github.com/ofgulban/retinex_for_mri/archive/0.2.8.tar.gz',
+      download_url='https://github.com/ofgulban/retinex_for_mri/archive/0.2.9.tar.gz',
       author='Omer Faruk Gulban',
       author_email='faruk.gulban@maastrichtuniversity.nl',
       license='GNU Geneal Public License Version 3',
