@@ -10,16 +10,16 @@ from __future__ import division
 import os
 import numpy as np
 from nibabel import load, save, Nifti1Image
-from retinex_for_mri.core import MultiScaleRetinex_3D
+from retinex_for_mri.core import multi_scale_retinex_3d
 from retinex_for_mri.conversions import rgb2hsl, hsl2rgb
 from retinex_for_mri.utils import truncate_and_scale
 np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/media/Data_Drive/Segmentator_Data/Sri/orig/inv1_mp2rage.nii.gz')
-vol2 = load('/media/Data_Drive/Segmentator_Data/Sri/orig/inv2_mp2rage.nii.gz')
-vol3 = load('/media/Data_Drive/Segmentator_Data/Sri/orig/uni_mp2rage.nii.gz')
+vol1 = load('/path/to/file1.nii.gz')
+vol2 = load('/path/to/file2.nii.gz')
+vol3 = load('/path/to/file3.nii.gz')
 
 basename_vol1 = vol1.get_filename().split(os.extsep, 1)[0]
 basename_vol2 = vol2.get_filename().split(os.extsep, 1)[0]
