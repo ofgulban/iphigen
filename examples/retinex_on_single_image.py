@@ -5,7 +5,7 @@ import numpy as np
 from nibabel import load, save, Nifti1Image
 
 from retinex_for_mri.utils import truncate_and_scale
-from retinex_for_mri.core import MultiScaleRetinex_3D
+from retinex_for_mri.core import multi_scale_retinex_3d
 
 # Load nifti
 nii = load('/path/to/your/file.nii.gz')
@@ -16,7 +16,7 @@ data = nii.get_data()
 data = truncate_and_scale(data, percMin=0, percMax=100, zeroTo=1.0)
 
 # Retinex
-new_data = MultiScaleRetinex_3D(data, scales=[1, 3, 10])
+new_data = multi_scale_retinex_3d(data, scales=[1, 3, 10])
 
 # Scale the data
 new_data = truncate_and_scale(new_data, percMin=0, percMax=100, zeroTo=200)

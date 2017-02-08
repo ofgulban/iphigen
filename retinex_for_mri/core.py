@@ -7,7 +7,7 @@ from scipy.ndimage import gaussian_filter
 np.seterr(divide='ignore', invalid='ignore')
 
 
-def MultiScaleRetinex_3D(image, scales=[1, 10, 30]):
+def multi_scale_retinex_3d(image, scales=[1, 10, 30]):
     """Multi scale retinex for 3 dimensional images.
 
     Parameters
