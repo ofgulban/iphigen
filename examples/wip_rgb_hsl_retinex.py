@@ -17,9 +17,9 @@ np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/path/to/file1.nii.gz')
-vol2 = load('/path/to/file2.nii.gz')
-vol3 = load('/path/to/file3.nii.gz')
+vol1 = load('/home/faruk/Data/Faruk/M01/derived/composition/M01_T1w_bet_nosub.nii.gz')
+vol2 = load('/home/faruk/Data/Faruk/M01/derived/composition/M01_PD_bet_nosub.nii.gz')
+vol3 = load('/home/faruk/Data/Faruk/M01/derived/composition/M01_T2s_bet_nosub.nii.gz')
 
 basename_vol1 = vol1.get_filename().split(os.extsep, 1)[0]
 basename_vol2 = vol2.get_filename().split(os.extsep, 1)[0]
@@ -60,7 +60,7 @@ print 'RGB to HSL conversion is done.'
 
 # MSRCP (multiscale retinex with colour preservation)
 lum = hsl[:, :, :, 2]
-lum = MultiScaleRetinex_3D(lum, scales=[1, 3, 10])
+lum = multi_scale_retinex_3d(lum, scales=[1, 3, 10])
 lum = truncate_and_scale(lum, percMin=0, percMax=100)
 
 out = Nifti1Image(np.squeeze(lum),
@@ -94,7 +94,7 @@ print "Done."
 # Extension ----- Apply retinex on T1w ----------------------------------------
 #
 # red = rgb[:, :, :, 0]
-# red = MultiScaleRetinex(red, scales=[2, 10, 20])
+# red = multi_scale_retinex_3d(red, scales=[2, 10, 20])
 # # red = truncate_and_scale(red, percMin=0, percMax=100)
 # red = red*500
 #
