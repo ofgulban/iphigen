@@ -5,12 +5,12 @@
 
 ## Retinex for MRI (work in progress)
 
-Currently this package is not intended for general use. However if you do use it and find it useful cite it with the Zenodo DOI:  
+Currently this package is not intended for general use. However if you do use it and find it useful cite it with the Zenodo DOI:
 * Omer Faruk Gulban, 2017. Retinex for MRI v0.2.0. doi:10.5281/zenodo.259401
 
 ## Dependencies
 
-[Python 2.7](https://www.python.org/download/releases/2.7/) and the following packages:
+**[Python 2.7](https://www.python.org/download/releases/2.7/)** or **[Python 3.6](https://www.python.org/downloads/release/python-363/)** (compatible with both).
 
 | Package                              | Tested version |
 |--------------------------------------|----------------|
@@ -25,7 +25,7 @@ To install, simply clone the repository or download the latest release and run t
 pip install -e /path/to/retinex_for_mri
 ```
 
-**NOTE:** This repository is still in development and example scripts prefixed with **wip** are not yet prepared for general usage.  
+**NOTE:** This repository is still in development and example scripts prefixed with **wip** are not yet prepared for general usage.
 *However*, if you would like to use the core functions please see the [dosctrings](https://en.wikipedia.org/wiki/Docstring) of [**core.py**](retinex_for_mri/core.py) or [**filters.py**](retinex_for_mri/filters.py).
 
 ## Support
