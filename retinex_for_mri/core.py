@@ -37,12 +37,12 @@ def multi_scale_retinex_3d(image, scales=[1, 10, 30]):
 
     """
     start = time.time()
-    print('applying multi-scale retinex filter...')
+    print('Applying multi-scale retinex filter...')
 
     scales = np.array(scales)  # sigma values
     msr = np.zeros(image.shape + (scales.size,))
     for i, sigma in enumerate(scales):
-        print '.'
+        print('.')
         msr[:, :, :, i] = np.log(image + 1) \
             - np.log(gaussian_filter(image, sigma, mode="constant", cval=0.0)
                      + 1)
@@ -55,6 +55,6 @@ def multi_scale_retinex_3d(image, scales=[1, 10, 30]):
     msr = np.exp(msr-1)
 
     end = time.time()
-    print 'Multi-scale retinex computed in:', (end - start), 'seconds'
+    print('Multi-scale retinex computed in:', (end - start), 'seconds')
 
     return msr
