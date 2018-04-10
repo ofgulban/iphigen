@@ -62,7 +62,7 @@ out = Nifti1Image(np.squeeze(rgb[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
 save(out, os.path.join(dirname, 'TEST_blue.nii.gz'))
 
-print "Done."
+print("Done.")
 
 # -----------------------------------------------------------------------------
 # TESTS

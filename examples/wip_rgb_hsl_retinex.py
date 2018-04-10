@@ -56,7 +56,7 @@ save(out, basename_vol1 + '_sat.nii.gz')
 out = Nifti1Image(np.squeeze(hsl[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol1 + '_lum.nii.gz')
-print 'RGB to HSL conversion is done.'
+print('RGB to HSL conversion is done.')
 
 # MSRCP (multiscale retinex with colour preservation)
 lum = hsl[:, :, :, 2]
@@ -66,7 +66,7 @@ lum = truncate_and_scale(lum, percMin=0, percMax=100)
 out = Nifti1Image(np.squeeze(lum),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol1 + '_lum_msr.nii.gz')
-print 'MSR on luminance is done.'
+print('MSR on luminance is done.')
 
 hsl[:, :, :, 2] = lum
 del lum
@@ -75,9 +75,9 @@ del lum
 flat = hsl.reshape(shape[0]*shape[1]*shape[2], shape[3])
 rgb = hsl2rgb(flat)
 rgb = rgb.reshape(shape)
-print 'HSL to RGB conversion is done.'
+print('HSL to RGB conversion is done.')
 rgb = rgb * 500
-print 'Data range (0-1) is scaled with 500.'
+print('Data range (0-1) is scaled with 500.')
 
 out = Nifti1Image(np.squeeze(rgb[:, :, :, 0]),
                   header=niiHeader, affine=niiAffine)
@@ -89,7 +89,7 @@ out = Nifti1Image(np.squeeze(rgb[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol3 + '_MSRCP.nii.gz')
 
-print "Done."
+print("Done.")
 
 # Extension ----- Apply retinex on T1w ----------------------------------------
 #
@@ -101,4 +101,4 @@ print "Done."
 # out = Nifti1Image(np.squeeze(red),
 #                   header=niiHeader, affine=niiAffine)
 # save(out, basename_vol1 + '_MSRCP_MSR.nii.gz')
-# print 'MSR on T1w is done.'
+# print('MSR on T1w is done.')
