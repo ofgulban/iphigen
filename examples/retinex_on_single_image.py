@@ -8,7 +8,7 @@ from retinex_for_mri.utils import truncate_and_scale
 from retinex_for_mri.core import multi_scale_retinex_3d
 
 # Load nifti
-nii = load('/home/faruk/gdrive/Segmentator/brainbox32/010_northern_plains_gray_langur/LangurIndienPith_8390.nii.gz')
+nii = load('/path/to/file.nii.gz')
 basename_vol1 = nii.get_filename().split(os.extsep, 1)[0]
 
 # Preprocess

@@ -1,4 +1,4 @@
-"""!!! WIP !!! Pseudo-color test for mri data."""
+"""Example script for converting 3 channel RGB-like MRI data to HSL."""
 
 from __future__ import division
 import os
@@ -10,9 +10,9 @@ np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/media/Data_Drive/test4/S05_SES1_T1_divT2s_pt5_DIF.nii')
-vol2 = load('/media/Data_Drive/test4/S05_SES1_T1_divPD_pt5_DIF.nii')
-vol3 = load('/media/Data_Drive/test4/S05_SES1_PD_divT2s_pt5_DIF.nii')
+vol1 = load('/path/to/file1.nii')
+vol2 = load('/path/to/file2.nii')
+vol3 = load('/path/to/file3.nii')
 
 basename = vol1.get_filename().split(os.extsep, 1)[0]
 dirname = os.path.dirname(vol1.get_filename())
@@ -63,23 +63,3 @@ out = Nifti1Image(np.squeeze(rgb[:, :, :, 2]),
 save(out, os.path.join(dirname, 'TEST_blue.nii.gz'))
 
 print("Done.")
-
-# -----------------------------------------------------------------------------
-# TESTS
-"""Can be converted to test scripts, Do not delete"""
-
-# flat = np.zeros([5, 3])
-# flat[0, :] = [1, 0.22, 0]
-# flat[1, :] = [0, 1, 0.33]
-# flat[2, :] = [0.666, 0.12, 1]
-# flat[3, :] = [1, 1, 1]
-#
-# flat.shape
-#
-# hsl = rgb2hsl(flat)
-# hsl
-#
-# rgb = hsl2rgb(hsl)
-# rgb
-
-# -----------------------------------------------------------------------------
