@@ -8,7 +8,7 @@ from retinex_for_mri.utils import truncate_and_scale
 from retinex_for_mri.core import multi_scale_retinex_3d
 
 # Load nifti
-nii = load('/path/to/your/file.nii.gz')
+nii = load('/path/to/file.nii.gz')
 basename_vol1 = nii.get_filename().split(os.extsep, 1)[0]
 
 # Preprocess
@@ -24,4 +24,4 @@ new_data = truncate_and_scale(new_data, percMin=0, percMax=100, zeroTo=200)
 # Save corrected image
 out = Nifti1Image(np.squeeze(new_data), affine=nii.affine)
 save(out, basename_vol1 + '_msr.nii.gz')
-print 'Finished.'
+print('Finished.')

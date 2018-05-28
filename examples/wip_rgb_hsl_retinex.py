@@ -1,10 +1,4 @@
-"""!!! WIP !!! Pseudo-color test for mri data.
-
-Caution!
-    If you get a nibabel error about slope / inter range, this is due to nifti
-    the headers. A workaround is to run fslmaths -range on the nifti files
-    beforehand.
-"""
+"""Example script for doing color preserving retines on RGB-like MRI data."""
 
 from __future__ import division
 import os
@@ -17,9 +11,9 @@ np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/home/faruk/Data/Faruk/M01/derived/composition/M01_T1w_bet_nosub.nii.gz')
-vol2 = load('/home/faruk/Data/Faruk/M01/derived/composition/M01_PD_bet_nosub.nii.gz')
-vol3 = load('/home/faruk/Data/Faruk/M01/derived/composition/M01_T2s_bet_nosub.nii.gz')
+vol1 = load('/path/to/file_T1w.nii.gz')
+vol2 = load('/path/to/file_PDw.nii.gz')
+vol3 = load('/path/to/file_T2w.nii.gz')
 
 basename_vol1 = vol1.get_filename().split(os.extsep, 1)[0]
 basename_vol2 = vol2.get_filename().split(os.extsep, 1)[0]
@@ -28,6 +22,10 @@ basename_vol3 = vol3.get_filename().split(os.extsep, 1)[0]
 dirname = os.path.dirname(vol1.get_filename())
 niiHeader, niiAffine = vol1.header, vol1.affine
 shape = vol1.shape + (3,)
+
+# Parameters
+data_range = 500
+retinex_scales = [1, 3, 10]
 
 # Preprocess
 vol1 = truncate_and_scale(vol1.get_data(), percMin=0, percMax=100, zeroTo=1.0)
@@ -42,7 +40,7 @@ del vol2
 rgb[:, :, :, 2] = np.nan_to_num(vol3)
 del vol3
 
-# RGB to HSL
+# RGB to HSL conversion and exports
 flat = rgb.reshape(shape[0]*shape[1]*shape[2], shape[3])
 hsl = rgb2hsl(flat)
 hsl = hsl.reshape(shape)
@@ -56,17 +54,17 @@ save(out, basename_vol1 + '_sat.nii.gz')
 out = Nifti1Image(np.squeeze(hsl[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol1 + '_lum.nii.gz')
-print 'RGB to HSL conversion is done.'
+print('RGB to HSL conversion is done.')
 
 # MSRCP (multiscale retinex with colour preservation)
 lum = hsl[:, :, :, 2]
-lum = multi_scale_retinex_3d(lum, scales=[1, 3, 10])
+lum = multi_scale_retinex_3d(lum, scales=retinex_scales)
 lum = truncate_and_scale(lum, percMin=0, percMax=100)
 
 out = Nifti1Image(np.squeeze(lum),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol1 + '_lum_msr.nii.gz')
-print 'MSR on luminance is done.'
+print('MSR on luminance is done.')
 
 hsl[:, :, :, 2] = lum
 del lum
@@ -75,9 +73,9 @@ del lum
 flat = hsl.reshape(shape[0]*shape[1]*shape[2], shape[3])
 rgb = hsl2rgb(flat)
 rgb = rgb.reshape(shape)
-print 'HSL to RGB conversion is done.'
-rgb = rgb * 500
-print 'Data range (0-1) is scaled with 500.'
+print('HSL to RGB conversion is done.')
+rgb = rgb * data_range
+print('Data range (0-1) is scaled with 500.')
 
 out = Nifti1Image(np.squeeze(rgb[:, :, :, 0]),
                   header=niiHeader, affine=niiAffine)
@@ -89,16 +87,4 @@ out = Nifti1Image(np.squeeze(rgb[:, :, :, 2]),
                   header=niiHeader, affine=niiAffine)
 save(out, basename_vol3 + '_MSRCP.nii.gz')
 
-print "Done."
-
-# Extension ----- Apply retinex on T1w ----------------------------------------
-#
-# red = rgb[:, :, :, 0]
-# red = multi_scale_retinex_3d(red, scales=[2, 10, 20])
-# # red = truncate_and_scale(red, percMin=0, percMax=100)
-# red = red*500
-#
-# out = Nifti1Image(np.squeeze(red),
-#                   header=niiHeader, affine=niiAffine)
-# save(out, basename_vol1 + '_MSRCP_MSR.nii.gz')
-# print 'MSR on T1w is done.'
+print("Done.")

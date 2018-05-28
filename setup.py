@@ -24,5 +24,5 @@ setup(name='retinex_for_mri',
       license='GNU General Public License Version 3',
       packages=['retinex_for_mri'],
       install_requires=['numpy', 'scipy'],
-      keywords=['mri'],
+      keywords=['mri', 'retinex'],
       zip_safe=True)
