@@ -10,13 +10,13 @@ np.seterr(divide='ignore', invalid='ignore')
 
 """Load Data"""
 #
-vol1 = load('/path/to/file1.nii')
-vol2 = load('/path/to/file2.nii')
-vol3 = load('/path/to/file3.nii')
+vol1 = load('/media/Data_Drive/temp_cochlea/MEGRE_pt5/magnitude_echo0000.nii.gz')
+vol2 = load('/media/Data_Drive/temp_cochlea/MEGRE_pt5/magnitude_echo0001.nii.gz')
+vol3 = load('/media/Data_Drive/temp_cochlea/MEGRE_pt5/magnitude_echo0002.nii.gz')
 
 basename = vol1.get_filename().split(os.extsep, 1)[0]
 dirname = os.path.dirname(vol1.get_filename())
-niiHeader, niiAffine = vol1.get_header(), vol1.get_affine()
+niiHeader, niiAffine = vol1.header, vol1.affine
 shape = vol1.shape + (3,)
 
 # Preprocess
