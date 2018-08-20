@@ -1,7 +1,7 @@
-"""retinex_for_mri setup.
+"""pyretinex setup.
 
 To install, using the commandline do:
-    pip install -e /path/to/retinex_for_mri
+    pip install -e /path/to/pyretinex
 
 Notes for PyPI:
 python setup.py sdist upload -r pypitest
@@ -13,18 +13,18 @@ from setuptools import setup
 
 VERSION = '1.0.0'
 
-setup(name='retinex_for_mri',
+setup(name='pyretinex',
       version=VERSION,
-      description='Retinex algorithm for MRI data.',
+      description='Retinex algorithm implemented for MRI data.',
       url='https://github.com/ofgulban/retinex_for_mri',
       download_url=('https://github.com/ofgulban/retinex_for_mri/archive/'
                     + VERSION + '.tar.gz'),
       author='Omer Faruk Gulban',
       author_email='faruk.gulban@maastrichtuniversity.nl',
       license='GNU General Public License Version 3',
-      packages=['retinex_for_mri'],
+      packages=['pyretinex'],
       install_requires=['numpy', 'scipy'],
       keywords=['mri', 'retinex'],
       entry_points={'console_scripts': [
-          'retinex_for_mri = retinex_for_mri.__main__:main']},
+          'pyretinex = pyretinex.__main__:main']},
       zip_safe=True)

@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/retinex_for_mri.svg)](https://badge.fury.io/py/retinex_for_mri)
 
 
-## Retinex for MRI
+## PyRetinex
 
 Retinex image enhancement algorithm implemented for magnetic resonance imaging (MRI) data. This package is developed with MRI data in mind but it can be applied to any volumetric image.
 
@@ -26,11 +26,11 @@ python setup.py install
 # Usage
 See the commandline options with:
 ```
-retinex_for_mri -h
+pyretinex -h
 ```
 or simply run it with a nifti file:
 ```
-retinex_for_mri /path/to/image.nii.gz
+pyretinex /path/to/image.nii.gz
 ```
 
 ## Support

@@ -21,9 +21,9 @@ import os
 import argparse
 import numpy as np
 from nibabel import load, save, Nifti1Image
-from retinex_for_mri.core import multi_scale_retinex_3d
-from retinex_for_mri import __version__
-import retinex_for_mri.config as cfg
+from pyretinex.core import multi_scale_retinex_3d
+from pyretinex import __version__
+import pyretinex.config as cfg
 
 
 def main():
