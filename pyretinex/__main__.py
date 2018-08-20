@@ -1,6 +1,6 @@
-"""Retinex for magnetic resonance images."""
+"""Python implementation of retinex image enhancement algorithm."""
 
-# Part of 'Retinex for MRI' package.
+# Part of Pyretinex package.
 # Copyright (C) 2018  Omer Faruk Gulban
 #
 # This program is free software: you can redistribute it and/or modify
