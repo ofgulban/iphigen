@@ -1,5 +1,6 @@
 """Retinex for magnetic resonance images."""
 
+from __future__ import division
 import os
 import argparse
 import numpy as np
@@ -14,8 +15,10 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        'filename',  metavar='path',
-        help="Path to nii file with image data."
+        'filename',  metavar='path', nargs='+',
+        help="Path to nifti file. When a single path is provided applies \
+        multi-scale retinex (MSR). Otherwise switches to multi-scale retinex \
+        with barycenter preservation (MSRBP)."
         )
     parser.add_argument(
         '--scales', nargs='+', type=int, required=False,
@@ -24,41 +27,67 @@ def main():
         )
 
     args = parser.parse_args()
-
-    cfg.scales = args.scales
+    if args.scales:
+        scales = args.scales
+    else:
+        scales = cfg.scales
 
     # Welcome message
     welcome_str = 'Retinex for MRI {}'.format(__version__)
     welcome_decor = '=' * len(welcome_str)
     print('{}\n{}\n{}'.format(welcome_decor, welcome_str, welcome_decor))
 
-    # Load nifti
-    nii = load(args.filename)
-    basename = nii.get_filename().split(os.extsep, 1)[0]
-    data = nii.get_data()
+    # Determine which alorithm to use
+    nr_fileinputs = len(args.filename)
+    if nr_fileinputs > 1:
+        print('Multiple inputs, using multi-scale retinex with barycenter preservation (MSRBP).')
+        id_alg = 'MSRBP'
+    else:
+        print('Single input, using multi-scale retinex (MSR).')
+        id_alg = 'MSR'
 
     print('Selected scales: {}'.format(cfg.scales))
 
+    # Load nifti
+    nii, basename, data = [], [], []
+    for i in range(nr_fileinputs):
+        nii.append(load(args.filename[i]))
+        basename.append(nii[i].get_filename().split(os.extsep, 1)[0])
+        data.append(nii[i].get_data())
+
+    # Rearrange
+    if nr_fileinputs > 1:  # MSRBP
+        data = np.asarray(data)
+        data = data.transpose([1, 2, 3, 0])
+        inten = np.sum(data, axis=-1)
+        bary = data / inten[..., None]
+    else:  # MSR
+        inten = data[0]
+
     # Multi-scale retinex
-    new_data = multi_scale_retinex_3d(data, scales=cfg.scales)
+    new_inten = multi_scale_retinex_3d(inten, scales=scales)
 
     # Scale new data approximately to original dynamic range
-    opmin, opmax = np.nanpercentile(data, [2.5, 97.5])
-    npmin, npmax = np.nanpercentile(new_data, [2.5, 97.5])
-    odist = opmax - opmin
-    ndist = npmax - npmin
-    scale_factor = odist / ndist
-    new_data *= scale_factor
+    opmin, opmax = np.nanpercentile(inten, [2.5, 97.5])
+    npmin, npmax = np.nanpercentile(new_inten, [2.5, 97.5])
+    scale_factor = opmax - opmin / (npmax - npmin)
+    new_inten *= scale_factor
+
+    # scale identifier
+    id_scl = ''
+    for s in scales:
+        id_scl += '_{}'.format(s)
 
     # Save corrected image
     print('Saving...')
-    id_alg = 'MSR'  # algorithm identifier
-    id_scl = ''  # scale identifier
-    for s in cfg.scales:
-        id_scl += '_{}'.format(s)
-    out_name = '{}_{}{}.nii.gz'.format(basename, id_alg, id_scl)
-    out = Nifti1Image(np.squeeze(new_data), affine=nii.affine)
-    save(out, out_name)
+    for i in range(nr_fileinputs):
+        if nr_fileinputs > 1:  # MSRBP
+            out_img = bary[..., i] * new_inten
+        else:
+            out_img = new_inten
+        out_name = '{}_{}{}.nii.gz'.format(basename[i], id_alg, id_scl)
+        out = Nifti1Image(np.squeeze(out_img), affine=nii[i].affine)
+        save(out, out_name)
     print('Finished.')
 
 
