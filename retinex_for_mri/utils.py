@@ -3,33 +3,72 @@
 import numpy as np
 
 
-def truncate_and_scale(data, percMin=0.01, percMax=99.9, zeroTo=1.0):
-    """Truncate and scale the data as a preprocessing step.
+def truncate_range(data, percMin=0.25, percMax=99.75, discard_zeros=True):
+    """Truncate too low and too high values.
 
     Parameters
     ----------
-    data : nd numpy array
-        Data/image to be truncated and scaled.
-    percMin : float, positive
-        Minimum percentile to be truncated.
-    percMax : float, positive
-        Maximum percentile to be truncated.
-    zeroTo : float
-        Data will be returned in the range from 0 to this number.
+    data : np.ndarray
+        Image to be truncated.
+    percMin : float
+        Percentile minimum.
+    percMax : float
+        Percentile maximum.
+    discard_zeros : bool
+        Discard voxels with value 0 from truncation.
 
     Returns
     -------
-    data : nd numpy array
-        Truncated and scaled data/image.
+    data : np.ndarray
+        Truncated data.
+    pMin : float
+        Minimum truncation threshold which is used.
+    pMax : float
+        Maximum truncation threshold which is used.
 
     """
-    # adjust minimum
-    percDataMin = np.percentile(data, percMin)
-    data[np.where(data < percDataMin)] = percDataMin
-    data = data - data.min()
+    if discard_zeros:
+        msk = ~np.isclose(data, 0.)
+        pMin, pMax = np.nanpercentile(data[msk], [percMin, percMax])
+    else:
+        pMin, pMax = np.nanpercentile(data, [percMin, percMax])
+    temp = data[~np.isnan(data)]
+    temp[temp < pMin], temp[temp > pMax] = pMin, pMax  # truncate min and max
+    data[~np.isnan(data)] = temp
+    if discard_zeros:
+        data[~msk] = 0  # put back masked out voxels
+    return data, pMin, pMax
 
-    # adjust maximum
-    percDataMax = np.percentile(data, percMax)
-    data[np.where(data > percDataMax)] = percDataMax
-    data = 1./data.max() * data
-    return data * zeroTo
+
+def scale_range(data, scale_factor=500, delta=0, discard_zeros=True):
+    """Scale values as a preprocessing step.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        Image to be scaled.
+    scale_factor : float
+        Lower scaleFactors provides faster interface due to loweing the
+        resolution of 2D histogram ( 500 seems fast enough).
+    delta : float
+        Delta ensures that the max data points fall inside the last bin
+        when this function is used with histograms.
+    discard_zeros : bool
+        Discard voxels with value 0 from truncation.
+
+    Returns
+    -------
+    data: np.ndarray
+        Scaled image.
+
+    """
+    if discard_zeros:
+        msk = ~np.isclose(data, 0)
+    else:
+        msk = np.ones(data.shape, dtype=bool)
+    scale_factor = scale_factor - delta
+    data[msk] = data[msk] - np.nanmin(data[msk])
+    data[msk] = scale_factor / np.nanmax(data[msk]) * data[msk]
+    if discard_zeros:
+        data[~msk] = 0  # put back masked out voxels
+    return data
