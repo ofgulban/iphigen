@@ -56,7 +56,7 @@ def multi_scale_retinex(image, scales=None, verbose=True):
 
     start = time.time()
     if verbose:
-        print('Applying multi-scale retinex filter (new)...')
+        print('Applying multi-scale retinex filter...')
     scales = np.array(scales)  # sigma values
     msr = np.zeros(image.shape + (scales.size,))
 
