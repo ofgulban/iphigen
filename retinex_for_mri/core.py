@@ -54,7 +54,7 @@ def multi_scale_retinex_3d(image, scales=[1, 10, 30]):
     # return from logarithmic space
     msr = np.exp(msr-1)
 
-    duration = start - time.time()
-    print('Multi-scale retinex computed in: {} sec.'.format(duration))
+    duration = time.time() - start
+    print('Multi-scale retinex computed in {0:.1f} seconds.'.format(duration))
 
     return msr
