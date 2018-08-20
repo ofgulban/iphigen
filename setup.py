@@ -11,7 +11,7 @@ python setup.py sdist upload -r pypi
 
 from setuptools import setup
 
-VERSION = '0.3.0'
+VERSION = '1.0.0'
 
 setup(name='retinex_for_mri',
       version=VERSION,
@@ -25,4 +25,6 @@ setup(name='retinex_for_mri',
       packages=['retinex_for_mri'],
       install_requires=['numpy', 'scipy'],
       keywords=['mri', 'retinex'],
+      entry_points={'console_scripts': [
+          'retinex_for_mri = retinex_for_mri.__main__:main']},
       zip_safe=True)
