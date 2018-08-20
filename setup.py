@@ -26,5 +26,6 @@ setup(name='pyretinex',
       install_requires=['numpy', 'scipy'],
       keywords=['mri', 'retinex'],
       entry_points={'console_scripts': [
-          'pyretinex = pyretinex.__main__:main']},
+          'pyretinex = pyretinex.__main__:main',
+          'pyretinex_2d = pyretinex.pyretinex_2d:main']},
       zip_safe=True)

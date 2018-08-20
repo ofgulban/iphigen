@@ -32,8 +32,8 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        'filename',  metavar='path', nargs='+',
-        help="Path to nifti file. When a single path is provided applies \
+        'filename',  metavar='path',
+        help="Path to image. When a single path is provided applies \
         multi-scale retinex (MSR). Otherwise switches to multi-scale retinex \
         with barycenter preservation (MSRBP)."
         )
@@ -55,14 +55,13 @@ def main():
     print('{}\n{}\n{}'.format(welcome_decor, welcome_str, welcome_decor))
 
     # Determine which alorithm to use
-    nr_fileinputs = len(args.filename)
     print('2D mode, using multi-scale retinex with barycenter preservation (MSRBP).')
     id_alg = 'MSRBP'
 
     print('Selected scales: {}'.format(scales))
 
     # Load nifti
-    basename = args.filename[0].split(os.extsep, 1)[0]
+    basename, extention = args.filename[0].split(os.extsep, 1)
     data = cv2.imread(args.filename[0])
 
     inten = np.sum(data, axis=-1)
@@ -79,18 +78,19 @@ def main():
 
     # Corrected image
     out_img = bary * new_inten[..., None]
+    out_img = np.nan_to_num(out_img)
 
-    # Scale each channel for uint8 precision (TODO: bind to input range)
+    # Scale each channel for uint8 precision with simplest color balance
+    # TODO: Replace this with simplex color balance
     for i in range(3):
         out_img[..., i] = truncate_and_scale(out_img[..., i],
                                              percMin=2.5, percMax=97.5)
 
     print('Saving...')
-    # scale identifier
-    id_scl = ''
+    id_scl = ''  # scale identifier
     for s in scales:
         id_scl += '_{}'.format(s)
-    out_name = '{}_{}{}.jpg'.format(basename, id_alg, id_scl)
+    out_name = '{}_{}{}.{}'.format(basename, id_alg, id_scl, extention)
     cv2.imwrite(out_name, out_img)
     print('Finished.')
 

@@ -24,12 +24,11 @@ def truncate_and_scale(data, percMin=2.5, percMax=97.5, zeroTo=255):
 
     """
     # adjust minimum
-    percDataMin = np.nanpercentile(data, percMin)
-    data[np.where(data < percDataMin)] = percDataMin
+    pmin, pmax = np.percentile(data, [percMin, percMax])
+    data[np.where(data < pmin)] = pmin
+    data[np.where(data > pmax)] = pmax
     data = data - data.min()
 
     # adjust maximum
-    percDataMax = np.nanpercentile(data, percMax)
-    data[np.where(data > percDataMax)] = percDataMax
-    data = 1./data.max() * data
+    data = (1. / data.max()) * data
     return data * zeroTo
