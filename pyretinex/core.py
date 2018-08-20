@@ -23,13 +23,12 @@ from scipy.ndimage import gaussian_filter
 np.seterr(divide='ignore', invalid='ignore')
 
 
-def multi_scale_retinex_3d(image, scales=[1, 10, 30]):
-    """Multi scale retinex for 3 dimensional images.
+def multi_scale_retinex(image, scales=None, verbose=True):
+    """Multi scale retinex (MSR).
 
     Parameters
     ----------
-    image : 3d numpy array
-        Input image/data/volume.
+    image : 2d or 3d numpy array
 
     scales : list
         Standard deviations for Gaussian kernels. For futher
@@ -52,23 +51,29 @@ def multi_scale_retinex_3d(image, scales=[1, 10, 30]):
     Processing, 6(7), 965-976. DOI: 10.1109/83.597272
 
     """
-    start = time.time()
-    print('Applying multi-scale retinex filter...')
+    if scales is None:  # default parameters
+        scales = [1, 5, 10]
 
+    start = time.time()
+    if verbose:
+        print('Applying multi-scale retinex filter (new)...')
     scales = np.array(scales)  # sigma values
     msr = np.zeros(image.shape + (scales.size,))
+
     for i, sigma in enumerate(scales):
-        print('.')
-        msr[:, :, :, i] = np.log(image + 1) \
-            - np.log(gaussian_filter(image, sigma, mode="constant", cval=0.0)
-                     + 1)
+        if verbose:
+            print('.')
+        temp = gaussian_filter(image, sigma, mode="constant", cval=0.0)
+        msr[..., i] = np.log(image + 1) - np.log(temp + 1)
+    temp = None
+
     # remove nans
     msr = np.nan_to_num(msr)
-    # weighted sum
-    msr = np.sum(msr, 3) / scales.size
+    # average
+    msr = np.mean(msr, axis=-1)
     msr = np.nan_to_num(msr)
     # return from logarithmic space
-    msr = np.exp(msr-1)
+    msr = np.exp(msr - 1)
 
     duration = time.time() - start
     print('Multi-scale retinex computed in {0:.1f} seconds.'.format(duration))

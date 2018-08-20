@@ -21,7 +21,7 @@ import os
 import argparse
 import numpy as np
 from nibabel import load, save, Nifti1Image
-from pyretinex.core import multi_scale_retinex_3d
+from pyretinex.core import multi_scale_retinex
 from pyretinex import __version__
 import pyretinex.config as cfg
 
@@ -81,7 +81,7 @@ def main():
         inten = data[0]
 
     # Multi-scale retinex
-    new_inten = multi_scale_retinex_3d(inten, scales=scales)
+    new_inten = multi_scale_retinex(inten, scales=scales)
 
     # Scale new data approximately to original dynamic range
     opmin, opmax = np.nanpercentile(inten, [2.5, 97.5])
