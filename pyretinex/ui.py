@@ -25,18 +25,13 @@ def user_interface():
     parser.add_argument(
         '--scales', nargs='+', type=int, required=False,
         metavar=' '.join(str(e) for e in cfg.scales), default=cfg.scales,
-        help="Retinex scales."
-        )
-    parser.add_argument(
-        '--mode', type=str, required=False,
-        metavar=cfg.mode, default=cfg.mode,
-        help="Select 3D or 2D. 3D mode is for volume images such as magnetic \
-        resonance imaging data. 2D mode is for 2D RGB images (for example a \
-        png)."
+        help="Standard deviations for Gaussian kernels. More or less than 3 \
+        values can be given. Disscussion of how to determine/optimize the \
+        scale values can be found in Jobson, Rahman, Woodell (1997)"
         )
     parser.add_argument(
         "--color_balance", action='store_true',
-        help="Apply simplest color balance at the last step."
+        help="Apply simplest color balance at the last step (TODO: add ref)."
         )
 
     args = parser.parse_args()
