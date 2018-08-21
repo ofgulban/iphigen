@@ -4,7 +4,7 @@
 
 ## PyRetinex
 
-Provides a simple commandline interface for applying retinex image enhancement to images. It supports 3D images too, such as magnetic resonance (MR) images.
+Provides a simple commandline interface for applying _multi-scale retinex_ image enhancement. It supports 3D images too, such as magnetic resonance (MR) images.
 
 ## Dependencies
 
@@ -42,7 +42,7 @@ pyretinex_nifti /path/to/data.nii.gz
 ```
 TODO: Put before after image here.
 
-For further parameters, see:
+For other options, see:
 ```
 pyretinex -h
 ```
