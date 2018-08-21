@@ -1,9 +1,7 @@
 """Collection of simple, handy functions."""
 
 import os
-import cv2
 import numpy as np
-import nibabel as nb
 
 
 def truncate_and_scale(data, percMin=2.5, percMax=97.5, zeroTo=255):
