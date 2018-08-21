@@ -37,5 +37,4 @@ def user_interface():
     args = parser.parse_args()
     cfg.filename = args.filename
     cfg.scales = args.scales
-    cfg.mode = args.mode
     cfg.color_balance = args.color_balance
