@@ -4,7 +4,7 @@
 
 ## PyRetinex
 
-Retinex image enhancement algorithm implemented for magnetic resonance imaging (MRI) data. This package is developed with MRI data in mind but it can be applied to any volumetric image.
+Provides a simple commandline interface for applying retinex image enhancement to images. It supports 3D images too, such as magnetic resonance (MR) images.
 
 ## Dependencies
 
@@ -24,13 +24,27 @@ python setup.py install
 ```
 
 # Usage
-See the commandline options with:
+Simply apply retinex to an image with:
+```
+pyretinex /path/to/image.png
+```
+TODO: Put before after image here.
+
+Selecting different scales gives different results:
+```
+pyretinex /path/to/image.png --scales 5 20 100
+```
+TODO: Put before after image here.
+
+You can use this with nifti images too, simply call:
+```
+pyretinex_nifti /path/to/data.nii.gz
+```
+TODO: Put before after image here.
+
+For further parameters, see:
 ```
 pyretinex -h
-```
-or simply run it with a nifti file:
-```
-pyretinex /path/to/image.nii.gz
 ```
 
 ## Support
