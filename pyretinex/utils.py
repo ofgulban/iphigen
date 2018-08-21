@@ -64,39 +64,6 @@ def parse_filepath(filepath):
     return dirname, basename, ext
 
 
-def save_data(data, basepath, ext, original_filepath=None):
-    """Save images depending op their original extensionsself.
-
-    Parameters
-    ----------
-    data: ndim numpy array
-        Image data.
-    basepath: string
-        File name without directory and extension.
-    ext: string
-        File extension.
-    original_filepath: string
-        Full path of the original input file. NOTE: I could not find a way to
-        avoid having this when saving nifti files with original headers.
-
-    """
-    out_path = basepath + os.extsep + ext
-
-    if ext in ['nii', 'nii.gz']:
-        print('Saving nifti image...')
-        affine = (nb.load(original_filepath)).affine
-        out = nb.Nifti1Image(np.squeeze(data), affine=affine)
-
-        nb.save(out, out_path)
-    elif ext is 'npy':
-        print('Saving numpy array...')
-
-    elif ext in ['bmp', 'dib', 'jpeg', 'jpg', 'jpe', 'jp2', 'png', 'pbm',
-                 'pgm', 'ppm', 'sr', 'ras', 'tiff', 'tif']:
-        print('Saving RGB image...')
-        cv2.imwrite(out_path, data)
-
-
 def prepare_scale_suffix(scales):
     """Prepare scale identifier suffix.
 
