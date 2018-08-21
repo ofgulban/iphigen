@@ -20,6 +20,7 @@ from __future__ import division
 import time
 import numpy as np
 from scipy.ndimage import gaussian_filter
+from pyretinex.utils import truncate_and_scale
 np.seterr(divide='ignore', invalid='ignore')
 
 
@@ -62,7 +63,7 @@ def multi_scale_retinex(image, scales=None, verbose=True):
 
     for i, sigma in enumerate(scales):
         if verbose:
-            print('  .')
+            print('  Processing scale {} (sigma={})...'.format(i+1, sigma))
         temp = gaussian_filter(image, sigma, mode="constant", cval=0.0)
         msr[..., i] = np.log(image + 1) - np.log(temp + 1)
     temp = None
@@ -76,6 +77,40 @@ def multi_scale_retinex(image, scales=None, verbose=True):
     msr = np.exp(msr - 1)
 
     duration = time.time() - start
-    print('Multi-scale retinex computed in {0:.1f} seconds.'.format(duration))
+    print('  Took {0:.1f} seconds.'.format(duration))
 
     return msr
+
+
+def scale_approx(new_image, old_image):
+    """Scale new data approximately to original dynamic range.
+
+    TODO: replace percentile with gradient based percentile
+    """
+    opmin, opmax = np.nanpercentile(old_image, [2.5, 97.5])
+    npmin, npmax = np.nanpercentile(new_image, [2.5, 97.5])
+    scale_factor = opmax - opmin / (npmax - npmin)
+    new_image *= scale_factor
+    return new_image
+
+
+def simplest_color_balance(image, pmin=2.5, pmax=97.5):
+    """Simplest color balance.
+
+    Parameters
+    ----------
+    image: ndim numpy array
+        Last dimension should contain channels (eg. RGB)
+    pmin: float
+    pmax: float
+
+    Reference
+    ---------
+    TODO
+
+    """
+    dims = image.shape
+    for d in range(dims[-1]):
+        image[..., d] = truncate_and_scale(image[..., d],
+                                           percMin=pmin, percMax=pmax)
+    return image

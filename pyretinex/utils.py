@@ -37,7 +37,7 @@ def truncate_and_scale(data, percMin=2.5, percMax=97.5, zeroTo=255):
     return data * zeroTo
 
 
-def load_data(filepath):
+def parse_filepath(filepath):
     """Load images with different extensions.
 
     Parameters
@@ -61,23 +61,7 @@ def load_data(filepath):
     dirname = os.path.dirname(path)
     filename = path.split(os.sep)[-1]
     basename, ext = filename.split(os.extsep, 1)
-
-    # load data depending on extension
-    ext = ext.lower()  # for capital extensions
-    if ext in ['nii', 'nii.gz']:
-        print('Loading nifti image...')
-        nii = nb.load(filepath)
-        data = nii.get_data()
-    elif ext is 'npy':
-        print('Loading numpy array...')
-        data = np.load(filepath)
-    elif ext in ['bmp', 'dib', 'jpeg', 'jpg', 'jpe', 'jp2', 'png', 'pbm',
-                 'pgm', 'ppm', 'sr', 'ras', 'tiff', 'tif']:
-        print('Loading RGB image...')
-        data = cv2.imread(filepath)
-    else:
-        raise ValueError('Unrecognized file extension.')
-    return data, dirname, basename, ext
+    return dirname, basename, ext
 
 
 def save_data(data, basepath, ext, original_filepath=None):
@@ -96,11 +80,13 @@ def save_data(data, basepath, ext, original_filepath=None):
         avoid having this when saving nifti files with original headers.
 
     """
+    out_path = basepath + os.extsep + ext
+
     if ext in ['nii', 'nii.gz']:
         print('Saving nifti image...')
         affine = (nb.load(original_filepath)).affine
         out = nb.Nifti1Image(np.squeeze(data), affine=affine)
-        out_path = basepath + os.extsep + ext
+
         nb.save(out, out_path)
     elif ext is 'npy':
         print('Saving numpy array...')
@@ -108,3 +94,22 @@ def save_data(data, basepath, ext, original_filepath=None):
     elif ext in ['bmp', 'dib', 'jpeg', 'jpg', 'jpe', 'jp2', 'png', 'pbm',
                  'pgm', 'ppm', 'sr', 'ras', 'tiff', 'tif']:
         print('Saving RGB image...')
+        cv2.imwrite(out_path, data)
+
+
+def prepare_scale_suffix(scales):
+    """Prepare scale identifier suffix.
+
+    Parameters
+    ----------
+    scales: list
+
+    Returns
+    -------
+    id: string
+
+    """
+    id = ''
+    for s in scales:
+        id += '_{}'.format(s)
+    return id

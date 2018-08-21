@@ -18,26 +18,28 @@
 
 from __future__ import division
 import os
-import cv2
 import numpy as np
+import nibabel as nb
 from pyretinex import core, utils
 from pyretinex.ui import user_interface, display_welcome_message
 import pyretinex.config as cfg
 
 
 def main():
-    """Pyretinex for 2D images."""
+    """Pyretinex for nifti images."""
     user_interface()
     display_welcome_message()
     print('Selected scales:\n  {}'.format(cfg.scales))
 
     # Load data
-    data, dirname, basename, ext = [], [], [], []
+    data, affine, dirname, basename, ext = [], [], [], [], []
     nr_fileinputs = len(cfg.filename)
     print('Selected file(s):')
     for i in range(nr_fileinputs):
-        data.append(np.squeeze(cv2.imread(cfg.filename[i])))
+        nii = nb.load(cfg.filename[i])
+        affine.append(nii.affine)
         parses = utils.parse_filepath(cfg.filename[i])
+        data.append(np.squeeze(nii.get_data()))
         print('  Name: {}'.format(cfg.filename[i]))
         print('  Dimensions: {}'.format(data[i].shape))
         dirname.append(parses[0])
@@ -47,7 +49,6 @@ def main():
     # Reorganize data
     data = np.asarray(data)
     data = data.transpose([1, 2, 3, 0])
-    data = np.squeeze(data)
     # Compute intensity
     inten = np.sum(data, axis=-1)
     # Compute barycentic coordinates (equivalent to intensity for 0-simplex)
@@ -73,8 +74,9 @@ def main():
         out_name = '{}_MSRBP{}'.format(basename[i], id_scl)
         out_basepath = os.path.join(dirname[i], out_name)
         out_path = out_basepath + os.extsep + ext[i]
-        # Save 2D image
-        cv2.imwrite(out_path, new_data)
+        # Create nifti image and save
+        img = nb.Nifti1Image(new_data[..., i], affine=affine[i])
+        nb.save(img, out_path)
         print('  {} is saved.'.format(out_path))
     print('Finished.')
 
