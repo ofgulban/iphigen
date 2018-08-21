@@ -44,7 +44,7 @@ def multi_scale_retinex(image, scales=None, verbose=True):
 
     References
     ----------
-    [1] https://github.com/scipy/scipy/blob/v0.16.1/scipy/ndimage/filters.py#L251
+    [1] https://docs.scipy.org/doc/scipy/reference/generated/scipy.ndimage.gaussian_filter.html
 
     [2] Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997).
     A multiscale retinex for bridging the gap between color images and
@@ -106,7 +106,9 @@ def simplest_color_balance(image, pmin=2.5, pmax=97.5):
 
     Reference
     ---------
-    TODO
+    Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011).
+    Simplest Color Balance. Image Processing On Line, 1(1), 125–133.
+    http://doi.org/10.5201/ipol.2011.llmps-scb
 
     """
     dims = image.shape
