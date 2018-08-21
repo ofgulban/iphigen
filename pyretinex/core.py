@@ -56,13 +56,13 @@ def multi_scale_retinex(image, scales=None, verbose=True):
 
     start = time.time()
     if verbose:
-        print('Applying multi-scale retinex filter...')
+        print('Applying multi-scale retinex...')
     scales = np.array(scales)  # sigma values
     msr = np.zeros(image.shape + (scales.size,))
 
     for i, sigma in enumerate(scales):
         if verbose:
-            print('.')
+            print('  .')
         temp = gaussian_filter(image, sigma, mode="constant", cval=0.0)
         msr[..., i] = np.log(image + 1) - np.log(temp + 1)
     temp = None

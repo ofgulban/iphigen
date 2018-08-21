@@ -18,92 +18,80 @@
 
 from __future__ import division
 import os
-import argparse
 import numpy as np
-from nibabel import load, save, Nifti1Image
 from pyretinex.core import multi_scale_retinex
-from pyretinex import __version__
+from pyretinex.utils import load_data, save_data
+from pyretinex.ui import user_interface, display_welcome_message
 import pyretinex.config as cfg
 
 
 def main():
-    """Command line call argument parsing."""
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        'filename',  metavar='path', nargs='+',
-        help="Path to nifti file. When a single path is provided applies \
-        multi-scale retinex (MSR). Otherwise switches to multi-scale retinex \
-        with barycenter preservation (MSRBP)."
-        )
-    parser.add_argument(
-        '--scales', nargs='+', type=int, required=False,
-        metavar=' '.join(str(e) for e in cfg.scales),
-        help="Retinex scales."
-        )
-
-    args = parser.parse_args()
-    if args.scales:
-        scales = args.scales
-    else:
-        scales = cfg.scales
-
-    # Welcome message
-    welcome_str = 'Retinex for MRI {}'.format(__version__)
-    welcome_decor = '=' * len(welcome_str)
-    print('{}\n{}\n{}'.format(welcome_decor, welcome_str, welcome_decor))
-
-    # Determine which alorithm to use
-    nr_fileinputs = len(args.filename)
-    if nr_fileinputs > 1:
-        print('Multiple inputs, using multi-scale retinex with barycenter preservation (MSRBP).')
-        id_alg = 'MSRBP'
-    else:
-        print('Single input, using multi-scale retinex (MSR).')
-        id_alg = 'MSR'
-
+    """Pyretinex for 3D MRI data."""
+    user_interface()
+    display_welcome_message()
     print('Selected scales: {}'.format(cfg.scales))
 
-    # Load nifti
-    nii, basename, data = [], [], []
+    # Load data
+    data, dirname, basename, ext, filename = [], [], [], [], []
+    nr_fileinputs = len(cfg.filename)
     for i in range(nr_fileinputs):
-        nii.append(load(args.filename[i]))
-        basename.append(nii[i].get_filename().split(os.extsep, 1)[0])
-        data.append(nii[i].get_data())
+        iData, iDirname, iBasename, iExt = load_data(cfg.filename[i])
+        filename.append(cfg.filename[i])
+        data.append(iData)
+        dirname.append(iDirname)
+        basename.append(iBasename)
+        ext.append(iExt)
+        print('  Name: {}'.format(iBasename))
+        print('  Extension: {}'.format(iExt))
+        print('  Dimensions: {}'.format(iData.shape))
 
-    # Rearrange
-    if nr_fileinputs > 1:  # MSRBP
+    # Rearrange in case of multiple inputs
+    if nr_fileinputs > 1:
         data = np.asarray(data)
         data = data.transpose([1, 2, 3, 0])
+    else:
+        data = data[0]
+    dims = data.shape
+
+    # Single channel image barycenter does not exists (0-simplex)
+    if len(dims) == 4 and dims[-1] > 1:
         inten = np.sum(data, axis=-1)
         bary = data / inten[..., None]
-    else:  # MSR
-        inten = data[0]
+    else:
+        inten = data
 
     # Multi-scale retinex
-    new_inten = multi_scale_retinex(inten, scales=scales)
+    new_inten = multi_scale_retinex(inten, scales=cfg.scales)
 
     # Scale new data approximately to original dynamic range
+    # TODO: replace percentile with gradient based percentile
     opmin, opmax = np.nanpercentile(inten, [2.5, 97.5])
     npmin, npmax = np.nanpercentile(new_inten, [2.5, 97.5])
     scale_factor = opmax - opmin / (npmax - npmin)
     new_inten *= scale_factor
 
-    # scale identifier
+    # identifiers to use as suffixes
+    id_alg = 'MSRBP'
     id_scl = ''
-    for s in scales:
+    for s in cfg.scales:
         id_scl += '_{}'.format(s)
 
-    # Save corrected image
-    print('Saving...')
+    # Save output image
     for i in range(nr_fileinputs):
-        if nr_fileinputs > 1:  # MSRBP
-            out_img = bary[..., i] * new_inten
+
+        # Single channel image barycenter does not exists (0-simplex)
+        if nr_fileinputs > 1:
+            out_data = bary[..., i] * new_inten
         else:
-            out_img = new_inten
-        out_name = '{}_{}{}.nii.gz'.format(basename[i], id_alg, id_scl)
-        out = Nifti1Image(np.squeeze(out_img), affine=nii[i].affine)
-        save(out, out_name)
+            out_data = new_inten
+
+        # Generate output path
+        out_name = '{}_{}{}'.format(basename[i], id_alg, id_scl)
+        out_basepath = os.path.join(dirname[i], out_name)
+
+        save_data(out_data, out_basepath, ext[i],
+                  original_filepath=filename[i])
+
     print('Finished.')
 
 
