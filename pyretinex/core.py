@@ -107,7 +107,7 @@ def simplest_color_balance(image, pmin=2.5, pmax=97.5):
     Reference
     ---------
     Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011).
-    Simplest Color Balance. Image Processing On Line, 1(1), 125–133.
+    Simplest Color Balance. Image Processing On Line, 1(1), 125-133.
     http://doi.org/10.5201/ipol.2011.llmps-scb
 
     """
