@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/retinex_for_mri.svg)](https://badge.fury.io/py/retinex_for_mri)
 
 
-## PyRetinex
+## PyRetinex (work in progress)
 
 Provides a simple commandline interface for applying _multi-scale retinex_ image enhancement. It supports 3D images too, such as magnetic resonance (MR) images.
 

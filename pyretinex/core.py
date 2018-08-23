@@ -90,6 +90,8 @@ def scale_approx(new_image, old_image):
     """
     opmin, opmax = np.nanpercentile(old_image, [2.5, 97.5])
     npmin, npmax = np.nanpercentile(new_image, [2.5, 97.5])
+    print('old:{} {}'.format(opmin, opmax))
+    print('new:{} {}'.format(npmin, npmax))
     scale_factor = opmax - opmin / (npmax - npmin)
     new_image *= scale_factor
     return new_image
@@ -144,10 +146,10 @@ def simplex_color_balance(bary, center=True, standardize=False,
     mask = mask > 0
     temp = bary[mask]
 
-    sample_center = coda.sample_center(temp)
     # Interpretation of centering: Compositions cover the simplex space more
     # balanced across components. Similar to de-mean data.
     if center:
+        sample_center = coda.sample_center(temp)
         temp2 = np.full(temp.shape, sample_center)
         temp = coda.perturb(temp, temp2**-1.)
         temp2 = None
@@ -164,16 +166,26 @@ def simplex_color_balance(bary, center=True, standardize=False,
     if trunc_max:
         # Use Aitchison norm and powering to truncate extreme compositions
         anorm = coda.aitchison_norm(temp)
-        anorm_thr_max = np.percentile(anorm, [99.0])
+        anorm_thr_min, anorm_thr_max = np.percentile(anorm, [1., 99.])
+        # Max truncate
         idx_trunc = anorm > anorm_thr_max
         truncation_power = anorm[idx_trunc] / anorm_thr_max
         correction = np.ones(anorm.shape)
         correction[idx_trunc] = truncation_power
         temp = coda.power(temp, correction[:, None])
+        # min truncate
+        idx_trunc = anorm < anorm_thr_min
+        truncation_power = anorm[idx_trunc] / anorm_thr_min
+        correction = np.ones(anorm.shape)
+        correction[idx_trunc] = truncation_power
+        temp = coda.power(temp, correction[:, None])
+
     # TODO: Implement this similar to truncate and scpe function but for
     # simplex space. Proportion of dynamic range to the distance of between
     # aitchison norm percentiles gives the global scaling factor. This should
     # be done after truncation though.
+
+
 
     # Put back processed composition
     bary[mask] = temp

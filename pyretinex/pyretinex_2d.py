@@ -63,7 +63,7 @@ def main():
     if cfg.intensity_balance:
         print('Applying intensity balance...')
         new_inten = utils.truncate_and_scale(
-            new_inten, percMin=2.5, percMax=97.5, zeroTo=255*data.shape[-1])
+            new_inten, percMin=1, percMax=99, zeroTo=255*data.shape[-1])
         id_bal = id_bal + '_IB'
     if cfg.color_balance:
         print('Applying color balance...')
