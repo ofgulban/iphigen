@@ -30,11 +30,16 @@ def user_interface():
         scale values can be found in Jobson, Rahman, Woodell (1997)"
         )
     parser.add_argument(
+        "--intensity_balance", action='store_true',
+        help="Experimental, work in progress."
+        )
+    parser.add_argument(
         "--color_balance", action='store_true',
-        help="Apply simplest color balance at the last step (TODO: add ref)."
+        help="Experimental, work in progress."
         )
 
     args = parser.parse_args()
     cfg.filename = args.filename
     cfg.scales = args.scales
+    cfg.intensity_balance = args.intensity_balance
     cfg.color_balance = args.color_balance

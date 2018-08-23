@@ -45,7 +45,7 @@ def main():
         ext.append(parses[2])
 
     # Reorganize data
-    data = np.asarray(data)
+    data = np.asarray(data, dtype=float)
     data = data.transpose([1, 2, 3, 0])
     data = np.squeeze(data)
     # Compute intensity
@@ -57,20 +57,27 @@ def main():
     new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
     # Scale back to the approximage original intensity range
     new_inten = core.scale_approx(new_inten, inten)
-    # Insert back the processed intensity image
-    new_data = bary * new_inten[..., None]
 
-    # Scale each channel for uint8 precision with simplest color balance
-    # TODO: Replace this with simplex color balance
+    #  Balance components if desired
+    id_bal = ''
+    if cfg.intensity_balance:
+        print('Applying intensity balance...')
+        new_inten = utils.truncate_and_scale(
+            new_inten, percMin=2.5, percMax=97.5, zeroTo=255*data.shape[-1])
+        id_bal = id_bal + '_IB'
     if cfg.color_balance:
         print('Applying color balance...')
-        core.simplest_color_balance(new_data)
+        bary = core.simplex_color_balance(bary)
+        id_bal = id_bal + '_CB'
+
+    # Insert back the processed intensity image
+    new_data = bary * new_inten[..., None]
 
     print('Saving output(s)...')
     id_scl = utils.prepare_scale_suffix(cfg.scales)
     for i in range(nr_fileinputs):
         # Generate output path
-        out_name = '{}_MSRBP{}'.format(basename[i], id_scl)
+        out_name = '{}_MSRBP{}{}'.format(basename[i], id_scl, id_bal)
         out_basepath = os.path.join(dirname[i], out_name)
         out_path = out_basepath + os.extsep + ext[i]
         # Save 2D image

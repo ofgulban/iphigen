@@ -19,6 +19,7 @@
 from __future__ import division
 import time
 import numpy as np
+import compoda.core as coda
 from scipy.ndimage import gaussian_filter
 from pyretinex.utils import truncate_and_scale
 np.seterr(divide='ignore', invalid='ignore')
@@ -64,7 +65,7 @@ def multi_scale_retinex(image, scales=None, verbose=True):
     for i, sigma in enumerate(scales):
         if verbose:
             print('  Processing scale {} (sigma={})...'.format(i+1, sigma))
-        temp = gaussian_filter(image, sigma, mode="constant", cval=0.0)
+        temp = gaussian_filter(image, sigma, mode="reflect")
         msr[..., i] = np.log(image + 1) - np.log(temp + 1)
     temp = None
 
@@ -116,3 +117,64 @@ def simplest_color_balance(image, pmin=2.5, pmax=97.5):
         image[..., d] = truncate_and_scale(image[..., d],
                                            percMin=pmin, percMax=pmax)
     return image
+
+
+def simplex_color_balance(bary, center=True, standardize=False,
+                          trunc_max=False):
+    """Compositional data based method for color balance.
+
+    Parameters
+    ----------
+    bary: numpy.ndarray
+        Barycentric coordinates. Sum of all channels should add up to 1
+        (closed).
+
+    Returns
+    -------
+    bary: numpy.ndarray
+        Processed composition.
+
+    """
+    dims = bary.shape
+    bary = bary.reshape([np.prod(dims[:-1]), dims[-1]])
+    bary = np.nan_to_num(bary)
+
+    # Do not consider values <= 0
+    mask = np.prod(bary, axis=-1)
+    mask = mask > 0
+    temp = bary[mask]
+
+    sample_center = coda.sample_center(temp)
+    # Interpretation of centering: Compositions cover the simplex space more
+    # balanced across components. Similar to de-mean data.
+    if center:
+        temp2 = np.full(temp.shape, sample_center)
+        temp = coda.perturb(temp, temp2**-1.)
+        temp2 = None
+
+    # Interpretation of standardization: Centered compositions cover the
+    # dynamic range of simplex space more.
+    if standardize:  # Standardize
+        totvar = coda.sample_total_variance(temp, sample_center)
+        temp = coda.power(temp, np.power(totvar, -1./2.))
+
+    # Interpretation of max truncation: Pull the exterme compositions to
+    # threshold distance by using scaling. Scaling factor is determined for
+    # each outlier composition to pull more extreme compositions more strongly.
+    if trunc_max:
+        # Use Aitchison norm and powering to truncate extreme compositions
+        anorm = coda.aitchison_norm(temp)
+        anorm_thr_max = np.percentile(anorm, [99.0])
+        idx_trunc = anorm > anorm_thr_max
+        truncation_power = anorm[idx_trunc] / anorm_thr_max
+        correction = np.ones(anorm.shape)
+        correction[idx_trunc] = truncation_power
+        temp = coda.power(temp, correction[:, None])
+    # TODO: Implement this similar to truncate and scpe function but for
+    # simplex space. Proportion of dynamic range to the distance of between
+    # aitchison norm percentiles gives the global scaling factor. This should
+    # be done after truncation though.
+
+    # Put back processed composition
+    bary[mask] = temp
+    return bary.reshape(dims)
