@@ -6,3 +6,5 @@ pmin, pmax = 0, 100
 intensity_balance = False
 color_balance = False
 mode = '3D'
+filename = None
+out_dir = None

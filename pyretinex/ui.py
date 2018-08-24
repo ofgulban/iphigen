@@ -1,5 +1,6 @@
 """Collection of simple, handy functions."""
 
+import os
 import argparse
 import pyretinex.config as cfg
 from pyretinex import __package__, __version__
@@ -23,6 +24,11 @@ def user_interface():
         with barycenter preservation (MSRBP)."
         )
     parser.add_argument(
+        '--out_dir', type=str, metavar='path', required=False,
+        help="Absolute path of output directory. If not provided, processed \
+        images will be saved in the input image path."
+        )
+    parser.add_argument(
         '--scales', nargs='+', type=int, required=False,
         metavar=' '.join(str(e) for e in cfg.scales), default=cfg.scales,
         help="Standard deviations for Gaussian kernels. More or less than 3 \
@@ -44,6 +50,11 @@ def user_interface():
 
     args = parser.parse_args()
     cfg.filename = args.filename
+    if os.path.isdir(args.out_dir):
+        cfg.out_dir = args.out_dir
+    else:
+        raise ValueError('Output directory does not exist.')
+
     cfg.scales = args.scales
     cfg.intensity_balance = args.intensity_balance
     cfg.color_balance = args.color_balance
