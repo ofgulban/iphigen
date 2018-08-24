@@ -30,41 +30,49 @@ def user_interface():
         images will be saved in the input image path."
         )
     parser.add_argument(
+        "--retinex", action='store_true',
+        help="Apply retinex image enhancement."
+        )
+    parser.add_argument(
         '--scales', nargs='+', type=int, required=False,
         metavar=' '.join(str(e) for e in cfg.scales), default=cfg.scales,
-        help="Standard deviations for Gaussian kernels. More or less than 3 \
-        values can be given. Disscussion of how to determine/optimize the \
-        scale values can be found in Jobson, Rahman, Woodell (1997)"
+        help="Standard deviations for gussian kernels used as retinex scales.\
+        More or less than 3 values can be given. Disscussion of how to \
+        determine/optimize the scales can be found in Jobson, Rahman, Woodell \
+        (1997)."
         )
     parser.add_argument(
-        "--balance_perc", type=float, nargs=2,
-        metavar=' '.join(str(e) for e in cfg.balance_perc),
-        default=cfg.balance_perc,
-        help="Percentile values used for intensity balancing. Should be \
-        between 0-100. Always takes two values. Setting these values to \
-        0 and 100 does not have any effect on the image."
+        "--intensity_balance", action='store_true',
+        help="Balance intensiy using percentile thresholding."
         )
     parser.add_argument(
-        "--color_balance", action='store_true',
+        "--simplest_color_balance", action='store_true',
+        help="Apply simplest color balance, see Limare et al (2011)."
+        )
+    # parser.add_argument(
+    #     "--int_bal_perc", type=float, nargs=2,
+    #     metavar=' '.join(str(e) for e in cfg.int_bal_perc),
+    #     default=cfg.int_bal_perc,
+    #     help="Percentile values used for intensity balancing. Should be \
+    #     between 0-100. Always takes two values. Setting these values to \
+    #     0 and 100 does not have any effect on the image."
+    #     )
+    parser.add_argument(
+        "--simplex_color_balance", action='store_true',
         help="Highly experimental feature. Work in progress."
-        )
-    parser.add_argument(
-        "--no_int_bal", action='store_true',
-        help="Do not perform intensity balance. Useful for diagnosis.."
-        )
-    parser.add_argument(
-        "--no_retinex", action='store_true',
-        help="Do not perform retinex image enhancement. Useful for diagnosis."
         )
 
     args = parser.parse_args()
     cfg.filename = args.filename
     cfg.out_dir = args.out_dir
     cfg.scales = args.scales
-    cfg.balance_perc = args.balance_perc
-    cfg.color_balance = args.color_balance
-    cfg.no_int_bal = args.no_int_bal
-    cfg.no_retinex = args.no_retinex
+
+    cfg.retinex = args.retinex
+    cfg.intensity_balance = args.intensity_balance
+    cfg.simplest_color_balance = args.simplest_color_balance
+    cfg.simplex_color_balance = args.simplex_color_balance
+
+    # cfg.int_bal_perc = args.int_bal_perc
 
     for f in cfg.filename:
         if os.path.isfile(f):
@@ -77,3 +85,6 @@ def user_interface():
             pass
         else:
             os.mkdir(cfg.out_dir)
+
+    if cfg.simplest_color_balance and cfg.simplex_color_balance:
+        raise ValueError('Please only select one color balance method.')

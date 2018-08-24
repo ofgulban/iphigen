@@ -46,45 +46,51 @@ def main():
         # Compute barycentic coordinates
         bary = data / inten[..., None]
 
-        id_bal = ''
-        if cfg.no_int_bal:
-            pass
-        else:
+        suf = ''
+        if cfg.intensity_balance:
             print('Applying intensity balance...')
-            id_bal = id_bal + '_IB'
+            print('  Percentiles: {}'.format(cfg.int_bal_perc))
+            suf = suf + '_IB'
             inten = utils.truncate_and_scale(
-                inten, pmin=cfg.balance_perc[0], pmax=cfg.balance_perc[1],
+                inten, pmin=cfg.int_bal_perc[0], pmax=cfg.int_bal_perc[1],
                 zero_to=255*data.shape[-1])
             data = bary * inten[..., None]
             # Update barycentic coordinates
             bary = data / inten[..., None]
 
-        if cfg.no_retinex:
-            id_ret = ''
-        else:
+        if cfg.retinex:
             print('Selected retinex scales:\n  {}'.format(cfg.scales))
-            id_ret = '_MSRCP' + utils.prepare_scale_suffix(cfg.scales)
+            suf = suf + '_MSRCP' + utils.prepare_scale_suffix(cfg.scales)
             # Appy multi-scale retinex on intensity
             new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
             # Scale back to the approximage original intensity range
             inten = core.scale_approx(new_inten, inten)
 
-        if cfg.color_balance:
+        if cfg.simplex_color_balance:
             print('Applying color balance...')
-            id_bal = id_bal + '_CB'
+            suf = suf + '_SimplexCB'
             bary = core.simplex_color_balance(bary)
 
         # Insert back the processed intensity image
         new_data = bary * inten[..., None]
 
-        print('Saving output...')
-        # Generate output path
-        out_name = '{}{}{}'.format(basename, id_ret, id_bal)
-        out_basepath = os.path.join(dirname, out_name)
-        out_path = out_basepath + os.extsep + ext
-        # Save 2D image
-        cv2.imwrite(out_path, new_data)
-        print('  {} is saved.\n'.format(out_path))
+        if cfg.simplest_color_balance:
+            print('Applying simplest color balance...')
+            print('  Percentiles: {}'.format(cfg.int_bal_perc))
+            suf = suf + '_SimplestCB'
+            new_data = core.simplest_color_balance(
+                new_data, pmin=cfg.simplest_perc[0], pmax=cfg.simplest_perc[1])
+
+        # Check at least one operation is selected before saving anything
+        if sum([cfg.retinex, cfg.intensity_balance, cfg.simplex_color_balance,
+                cfg.simplest_color_balance]) > 0:
+            print('Saving output...')
+            out_basepath = os.path.join(dirname, '{}{}'.format(basename, suf))
+            out_path = out_basepath + os.extsep + ext
+            cv2.imwrite(out_path, new_data)
+            print('  {} is saved.\n'.format(out_path))
+        else:
+            print('No operation selected, not saving anything.')
     print('Finished.')
 
 

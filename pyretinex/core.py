@@ -97,7 +97,7 @@ def scale_approx(new_image, old_image):
     return new_image
 
 
-def simplest_color_balance(image, pmin=1, pmax=99):
+def simplest_color_balance(image, pmin=1., pmax=99.):
     """Simplest color balance.
 
     Parameters
@@ -116,8 +116,8 @@ def simplest_color_balance(image, pmin=1, pmax=99):
     """
     dims = image.shape
     for d in range(dims[-1]):
-        image[..., d] = truncate_and_scale(image[..., d],
-                                           percMin=pmin, percMax=pmax)
+        image[..., d] = truncate_and_scale(
+            image[..., d], pmin=pmin, pmax=pmax, zero_to=255)
     return image
 
 
