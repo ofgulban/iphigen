@@ -25,6 +25,7 @@ def user_interface():
         )
     parser.add_argument(
         '--out_dir', type=str, metavar='path', required=False,
+        default=cfg.out_dir,
         help="Absolute path of output directory. If not provided, processed \
         images will be saved in the input image path."
         )
@@ -50,12 +51,14 @@ def user_interface():
 
     args = parser.parse_args()
     cfg.filename = args.filename
-    if os.path.isdir(args.out_dir):
-        cfg.out_dir = args.out_dir
-    else:
-        raise ValueError('Output directory does not exist.')
-
+    cfg.out_dir = args.out_dir
     cfg.scales = args.scales
     cfg.intensity_balance = args.intensity_balance
     cfg.color_balance = args.color_balance
     cfg.no_retinex = args.no_retinex
+
+    if cfg.out_dir:
+        if os.path.isdir(cfg.out_dir):
+            pass
+        else:
+            os.mkdir(cfg.out_dir)
