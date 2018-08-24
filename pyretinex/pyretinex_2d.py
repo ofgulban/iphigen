@@ -52,24 +52,26 @@ def main():
     # Compute barycentic coordinates (equivalent to intensity for 0-simplex)
     bary = data / inten[..., None]
 
-    if cfg.no_retinex:
-        id_ret = ''
-    else:
-        print('Selected retinex scales:\n  {}'.format(cfg.scales))
-        id_ret = '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
-        orig_inten = np.copy(inten)
-        # Appy multi-scale retinex on intensity
-        inten = core.multi_scale_retinex(inten, scales=cfg.scales)
-        # Scale back to the approximage original intensity range
-        inten = core.scale_approx(inten, orig_inten)
-
-    #  Balance components if desired
     id_bal = ''
     if cfg.intensity_balance:
         print('Applying intensity balance...')
         inten = utils.truncate_and_scale(inten, percMin=1, percMax=99,
                                          zeroTo=255*data.shape[-1])
         id_bal = id_bal + '_IB'
+        data = bary * inten[..., None]
+        # Update barycentic coordinates
+        bary = data / inten[..., None]
+
+    if cfg.no_retinex:
+        id_ret = ''
+    else:
+        print('Selected retinex scales:\n  {}'.format(cfg.scales))
+        id_ret = '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
+        # Appy multi-scale retinex on intensity
+        new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
+        # Scale back to the approximage original intensity range
+        inten = core.scale_approx(new_inten, inten)
+
     if cfg.color_balance:
         print('Applying color balance...')
         bary = core.simplex_color_balance(bary)
