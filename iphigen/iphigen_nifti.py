@@ -1,4 +1,4 @@
-"""Python implementation of retinex image enhancement algorithm."""
+"""MRI data processing with retinex and balance methods."""
 
 # Part of Iphigen package.
 # Copyright (C) 2018  Omer Faruk Gulban
@@ -26,13 +26,9 @@ import iphigen.config as cfg
 
 
 def main():
-    """Process for nifti images."""
+    """Iphigen processes for nifti images."""
     user_interface()
     display_welcome_message()
-
-    raise ValueError('This part is not implemented.')
-
-    print('Selected scales:\n  {}'.format(cfg.scales_nifti))
 
     # Load data
     data, affine, dirname, basename, ext = [], [], [], [], []
@@ -45,7 +41,10 @@ def main():
         data.append(np.squeeze(nii.get_data()))
         print('  Name: {}'.format(cfg.filename[i]))
         print('  Dimensions: {}'.format(data[i].shape))
-        dirname.append(parses[0])
+        if cfg.out_dir:
+            dirname.append(cfg.out_dir)
+        else:
+            dirname.append(parses[0])
         basename.append(parses[1])
         ext.append(parses[2])
 
@@ -57,37 +56,60 @@ def main():
     # Compute barycentic coordinates (equivalent to intensity for 0-simplex)
     bary = data / inten[..., None]
 
-    # Appy multi-scale retinex on intensity
-    new_inten = core.multi_scale_retinex(inten, scales=cfg.scales_nifti)
-    # Scale back to the approximage original intensity range
-    new_inten = core.scale_approx(new_inten, inten)
-
-    #  Balance components if desired
-    id_bal = ''
+    suf = ''  # suffix
+    # TODO: consider zero_to option for MRI data
     if cfg.intensity_balance:
-        print('Applying intensity balance...')
-        new_inten = utils.truncate_and_scale(
-            new_inten, percMin=2.5, percMax=97.5, zeroTo=255*data.shape[-1])
-        id_bal = id_bal + '_IB'
-    if cfg.color_balance:
-        print('Applying color balance...')
+        raise ValueError('Intensity balance not implemented.')
+        # print('Applying intensity balance...')
+        # print('  Percentiles: {}'.format(cfg.int_bal_perc))
+        # suf = suf + '_IB'
+        # inten = utils.truncate_and_scale(
+        #     inten, pmin=cfg.int_bal_perc[0], pmax=cfg.int_bal_perc[1],
+        #     zero_to=255*data.shape[-1])
+        # data = bary * inten[..., None]
+        # # Update barycentic coordinates
+        # bary = data / inten[..., None]
+
+    if cfg.retinex:
+        print('Applying multi-scale retinex with barycenter preservation (MSRBP)...')
+        print('  Selected scales: {}'.format(cfg.scales_nifti))
+        suf = suf + '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
+        new_inten = core.multi_scale_retinex(inten, scales=cfg.scales_nifti)
+        # Scale back to the approximage original intensity range
+        inten = core.scale_approx(new_inten, inten)
+
+    if cfg.simplex_color_balance:
+        print('Applying simplex color balance...')
+        print('  Centering: {}'.format(cfg.simplex_center))
+        print('  Standardize: {}'.format(cfg.simplex_standardize))
+        suf = suf + '_SimplexCB'
         bary = core.simplex_color_balance(bary)
-        id_bal = id_bal + '_CB'
 
     # Insert back the processed intensity image
-    new_data = bary * new_inten[..., None]
+    data = bary * inten[..., None]
 
-    print('Saving output(s)...')
-    id_scl = utils.prepare_scale_suffix(cfg.scales_nifti)
-    for i in range(nr_fileinputs):
-        # Generate output path
-        out_name = '{}_MSRBP{}{}'.format(basename[i], id_scl, id_bal)
-        out_basepath = os.path.join(dirname[i], out_name)
-        out_path = out_basepath + os.extsep + ext[i]
-        # Create nifti image and save
-        img = nb.Nifti1Image(new_data[..., i], affine=affine[i])
-        nb.save(img, out_path)
-        print('  {} is saved.'.format(out_path))
+    if cfg.simplest_color_balance:
+        print('Applying simplest color balance...')
+        print('  Percentiles: {}'.format(cfg.int_bal_perc))
+        suf = suf + '_SimplestCB'
+        data = core.simplest_color_balance(
+            data, pmin=cfg.simplest_perc[0], pmax=cfg.simplest_perc[1])
+
+    # Check at least one operation is selected before saving anything
+    if sum([cfg.retinex, cfg.intensity_balance, cfg.simplex_color_balance,
+            cfg.simplest_color_balance]) > 0:
+        print('Saving output(s)...')
+        for i in range(nr_fileinputs):
+            # Generate output path
+            out_basepath = os.path.join(dirname[i],
+                                        '{}{}'.format(basename[i], suf))
+            out_path = out_basepath + os.extsep + ext[i]
+            # Create nifti image and save
+            img = nb.Nifti1Image(data[..., i], affine=affine[i])
+            nb.save(img, out_path)
+            print('  {} is saved.\n'.format(out_path))
+    else:
+        print('No operation selected, not saving anything.')
     print('Finished.')
 
 
