@@ -19,3 +19,5 @@ int_bal_perc = [1., 99.]  # intensity balance percentiles
 simplest_perc = [1., 99.]  # percentiles
 
 # simplex color balance defaults
+simplex_center = True
+simplex_standardize = False

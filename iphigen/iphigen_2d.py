@@ -67,9 +67,13 @@ def main():
             inten = core.scale_approx(new_inten, inten)
 
         if cfg.simplex_color_balance:
-            print('Applying color balance...')
+            print('Applying simplex color balance...')
+            print('  Centering: {}'.format(cfg.simplex_center))
+            print('  Standardize: {}'.format(cfg.simplex_standardize))
             suf = suf + '_SimplexCB'
-            bary = core.simplex_color_balance(bary)
+            bary = core.simplex_color_balance(
+                bary, center=cfg.simplex_center,
+                standardize=cfg.simplex_standardize)
 
         # Insert back the processed intensity image
         new_data = bary * inten[..., None]
