@@ -47,11 +47,14 @@ def main():
         bary = data / inten[..., None]
 
         id_bal = ''
-        if cfg.intensity_balance:
+        if cfg.no_int_bal:
+            pass
+        else:
             print('Applying intensity balance...')
-            inten = utils.truncate_and_scale(inten, percMin=1, percMax=99,
-                                             zeroTo=255*data.shape[-1])
             id_bal = id_bal + '_IB'
+            inten = utils.truncate_and_scale(
+                inten, pmin=cfg.balance_perc[0], pmax=cfg.balance_perc[1],
+                zero_to=255*data.shape[-1])
             data = bary * inten[..., None]
             # Update barycentic coordinates
             bary = data / inten[..., None]
@@ -60,7 +63,7 @@ def main():
             id_ret = ''
         else:
             print('Selected retinex scales:\n  {}'.format(cfg.scales))
-            id_ret = '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
+            id_ret = '_MSRCP' + utils.prepare_scale_suffix(cfg.scales)
             # Appy multi-scale retinex on intensity
             new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
             # Scale back to the approximage original intensity range
@@ -68,20 +71,20 @@ def main():
 
         if cfg.color_balance:
             print('Applying color balance...')
-            bary = core.simplex_color_balance(bary)
             id_bal = id_bal + '_CB'
+            bary = core.simplex_color_balance(bary)
 
         # Insert back the processed intensity image
         new_data = bary * inten[..., None]
 
-        print('Saving output(s)...')
+        print('Saving output...')
         # Generate output path
         out_name = '{}{}{}'.format(basename, id_ret, id_bal)
         out_basepath = os.path.join(dirname, out_name)
         out_path = out_basepath + os.extsep + ext
         # Save 2D image
         cv2.imwrite(out_path, new_data)
-        print('  {} is saved.'.format(out_path))
+        print('  {} is saved.\n'.format(out_path))
     print('Finished.')
 
 

@@ -37,12 +37,20 @@ def user_interface():
         scale values can be found in Jobson, Rahman, Woodell (1997)"
         )
     parser.add_argument(
-        "--intensity_balance", action='store_true',
-        help="Experimental, work in progress."
+        "--balance_perc", type=float, nargs=2,
+        metavar=' '.join(str(e) for e in cfg.balance_perc),
+        default=cfg.balance_perc,
+        help="Percentile values used for intensity balancing. Should be \
+        between 0-100. Always takes two values. Setting these values to \
+        0 and 100 does not have any effect on the image."
         )
     parser.add_argument(
         "--color_balance", action='store_true',
-        help="Experimental, work in progress."
+        help="Highly experimental feature. Work in progress."
+        )
+    parser.add_argument(
+        "--no_int_bal", action='store_true',
+        help="Do not perform intensity balance. Useful for diagnosis.."
         )
     parser.add_argument(
         "--no_retinex", action='store_true',
@@ -53,8 +61,9 @@ def user_interface():
     cfg.filename = args.filename
     cfg.out_dir = args.out_dir
     cfg.scales = args.scales
-    cfg.intensity_balance = args.intensity_balance
+    cfg.balance_perc = args.balance_perc
     cfg.color_balance = args.color_balance
+    cfg.no_int_bal = args.no_int_bal
     cfg.no_retinex = args.no_retinex
 
     for f in cfg.filename:

@@ -4,18 +4,18 @@ import os
 import numpy as np
 
 
-def truncate_and_scale(data, percMin=2.5, percMax=97.5, zeroTo=255):
+def truncate_and_scale(data, pmin=2.5, pmax=97.5, zero_to=255):
     """Truncate and scale the data as a preprocessing step.
 
     Parameters
     ----------
     data : nd numpy array
         Data/image to be truncated and scaled.
-    percMin : float, positive
+    pmin : float, positive
         Minimum percentile to be truncated.
-    percMax : float, positive
+    pmax : float, positive
         Maximum percentile to be truncated.
-    zeroTo : float
+    zero_to : float
         Data will be returned in the range from 0 to this number.
 
     Returns
@@ -25,14 +25,13 @@ def truncate_and_scale(data, percMin=2.5, percMax=97.5, zeroTo=255):
 
     """
     # adjust minimum
-    pmin, pmax = np.nanpercentile(data, [percMin, percMax])
+    pmin, pmax = np.nanpercentile(data, [pmin, pmax])
     data[np.where(data < pmin)] = pmin
     data[np.where(data > pmax)] = pmax
     data = data - np.nanmin(data)
-
     # adjust maximum
     data = (1. / np.nanmax(data)) * data
-    return data * zeroTo
+    return data * zero_to
 
 
 def parse_filepath(filepath):

@@ -90,14 +90,14 @@ def scale_approx(new_image, old_image):
     """
     opmin, opmax = np.nanpercentile(old_image, [2.5, 97.5])
     npmin, npmax = np.nanpercentile(new_image, [2.5, 97.5])
-    print('old:{} {}'.format(opmin, opmax))
-    print('new:{} {}'.format(npmin, npmax))
+    # print('old:{} {}'.format(opmin, opmax))
+    # print('new:{} {}'.format(npmin, npmax))
     scale_factor = opmax - opmin / (npmax - npmin)
     new_image *= scale_factor
     return new_image
 
 
-def simplest_color_balance(image, pmin=2.5, pmax=97.5):
+def simplest_color_balance(image, pmin=1, pmax=99):
     """Simplest color balance.
 
     Parameters
