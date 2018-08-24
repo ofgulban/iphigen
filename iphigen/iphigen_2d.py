@@ -60,7 +60,7 @@ def main():
 
         if cfg.retinex:
             print('Applying multi-scale retinex with color preservation (MSRCP)...')
-            print('  Selected retinex scales:\n  {}'.format(cfg.scales))
+            print('  Selected retinex scales: {}'.format(cfg.scales))
             suf = suf + '_MSRCP' + utils.prepare_scale_suffix(cfg.scales)
             new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
             # Scale back to the approximage original intensity range
