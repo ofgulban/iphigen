@@ -1,4 +1,4 @@
-"""Python implementation of retinex image enhancement algorithm."""
+"""RGB image processing with retinex and balance methods."""
 
 # Part of Iphigen package.
 # Copyright (C) 2018  Omer Faruk Gulban
@@ -26,7 +26,7 @@ import iphigen.config as cfg
 
 
 def main():
-    """Iphigen for 2D images."""
+    """Iphigen processes for 2D images."""
     user_interface()
     display_welcome_message()
 
@@ -46,7 +46,7 @@ def main():
         # Compute barycentic coordinates
         bary = data / inten[..., None]
 
-        suf = ''
+        suf = ''  # suffix
         if cfg.intensity_balance:
             print('Applying intensity balance...')
             print('  Percentiles: {}'.format(cfg.int_bal_perc))
@@ -59,9 +59,9 @@ def main():
             bary = data / inten[..., None]
 
         if cfg.retinex:
-            print('Selected retinex scales:\n  {}'.format(cfg.scales))
+            print('Applying multi-scale retinex with color preservation (MSRCP)...')
+            print('  Selected retinex scales:\n  {}'.format(cfg.scales))
             suf = suf + '_MSRCP' + utils.prepare_scale_suffix(cfg.scales)
-            # Appy multi-scale retinex on intensity
             new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
             # Scale back to the approximage original intensity range
             inten = core.scale_approx(new_inten, inten)
@@ -76,14 +76,14 @@ def main():
                 standardize=cfg.simplex_standardize)
 
         # Insert back the processed intensity image
-        new_data = bary * inten[..., None]
+        data = bary * inten[..., None]
 
         if cfg.simplest_color_balance:
             print('Applying simplest color balance...')
             print('  Percentiles: {}'.format(cfg.int_bal_perc))
             suf = suf + '_SimplestCB'
-            new_data = core.simplest_color_balance(
-                new_data, pmin=cfg.simplest_perc[0], pmax=cfg.simplest_perc[1])
+            data = core.simplest_color_balance(
+                data, pmin=cfg.simplest_perc[0], pmax=cfg.simplest_perc[1])
 
         # Check at least one operation is selected before saving anything
         if sum([cfg.retinex, cfg.intensity_balance, cfg.simplex_color_balance,
@@ -91,7 +91,7 @@ def main():
             print('Saving output...')
             out_basepath = os.path.join(dirname, '{}{}'.format(basename, suf))
             out_path = out_basepath + os.extsep + ext
-            cv2.imwrite(out_path, new_data)
+            cv2.imwrite(out_path, data)
             print('  {} is saved.\n'.format(out_path))
         else:
             print('No operation selected, not saving anything.')
