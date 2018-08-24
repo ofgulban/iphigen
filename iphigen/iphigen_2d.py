@@ -1,6 +1,6 @@
 """Python implementation of retinex image enhancement algorithm."""
 
-# Part of Pyretinex package.
+# Part of Iphigen package.
 # Copyright (C) 2018  Omer Faruk Gulban
 #
 # This program is free software: you can redistribute it and/or modify
@@ -20,13 +20,13 @@ from __future__ import division
 import os
 import cv2
 import numpy as np
-from pyretinex import core, utils
-from pyretinex.ui import user_interface, display_welcome_message
-import pyretinex.config as cfg
+from iphigen import core, utils
+from iphigen.ui import user_interface, display_welcome_message
+import iphigen.config as cfg
 
 
 def main():
-    """Pyretinex for 2D images."""
+    """Iphigen for 2D images."""
     user_interface()
     display_welcome_message()
 

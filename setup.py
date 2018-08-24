@@ -1,7 +1,7 @@
-"""pyretinex setup.
+"""Iphigen setup.
 
 To install, using the commandline do:
-    pip install -e /path/to/pyretinex
+    pip install -e /path/to/iphigen
 
 Notes for PyPI:
 python setup.py sdist upload -r pypitest
@@ -13,7 +13,7 @@ from setuptools import setup
 
 VERSION = '1.0.0'
 
-setup(name='pyretinex',
+setup(name='iphigen',
       version=VERSION,
       description='Retinex algorithm implemented for MRI data.',
       url='https://github.com/ofgulban/retinex_for_mri',
@@ -22,10 +22,10 @@ setup(name='pyretinex',
       author='Omer Faruk Gulban',
       author_email='faruk.gulban@maastrichtuniversity.nl',
       license='GNU General Public License Version 3',
-      packages=['pyretinex'],
+      packages=['iphigen'],
       install_requires=['numpy', 'scipy'],
       keywords=['mri', 'retinex'],
       entry_points={'console_scripts': [
-          'pyretinex = pyretinex.pyretinex_2d:main',
-          'pyretinex_nifti = pyretinex.pyretinex_nifti:main']},
+          'iphigen = iphigen.iphigen_2d:main',
+          'iphigen_nifti = iphigen.iphigen_nifti:main']},
       zip_safe=True)

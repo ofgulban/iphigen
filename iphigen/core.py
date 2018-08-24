@@ -1,6 +1,6 @@
-"""Core functions of pyretinex."""
+"""Core functions of Iphigen package."""
 
-# Part of Pyretinex package.
+# Part of Iphigen package.
 # Copyright (C) 2018  Omer Faruk Gulban
 #
 # This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ import time
 import numpy as np
 import compoda.core as coda
 from scipy.ndimage import gaussian_filter
-from pyretinex.utils import truncate_and_scale
+from iphigen.utils import truncate_and_scale
 np.seterr(divide='ignore', invalid='ignore')
 
 

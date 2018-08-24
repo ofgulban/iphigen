@@ -2,9 +2,13 @@
 [![PyPI version](https://badge.fury.io/py/retinex_for_mri.svg)](https://badge.fury.io/py/retinex_for_mri)
 
 
-## PyRetinex (work in progress)
+# Iphigen
 
-Provides a simple commandline interface for applying _multi-scale retinex_ image enhancement. It supports 3D images too, such as magnetic resonance (MR) images.
+Provides a simple commandline interface for multi-scale retinex image enhancement and color balancing. It supports 3D images too, such as magnetic resonance (MR) images.
+
+<img src="visuals/visual_01.png">
+
+# Getting started
 
 ## Dependencies
 
@@ -23,42 +27,49 @@ Clone this repository or download the latest release. In your commandline, chang
 python setup.py install
 ```
 
-# Usage
-Simply apply retinex to an image with:
+## Usage
+Apply retinex to an image with:
 ```
-pyretinex /path/to/image.png
+iphigen /path/to/image.png --retinex
 ```
-TODO: Put before after image here.
+<img src="visuals/visual_01.png">
 
-Selecting different scales gives different results:
+Intensity balance:
 ```
-pyretinex /path/to/image.png --scales 5 20 100
+iphigen_nifti /path/to/data.nii.gz --intensity_balance
 ```
-TODO: Put before after image here.
+<img src="visuals/visual_01.png">
 
-You can use this with nifti images too, simply call:
+Color balance:
 ```
-pyretinex_nifti /path/to/data.nii.gz
+iphigen_nifti /path/to/data.nii.gz --simplest_color_balance
 ```
-TODO: Put before after image here.
+<img src="visuals/visual_01.png">
 
-For other options, see:
+Mix and match:
 ```
-pyretinex -h
+iphigen /path/to/image.png --retinex --intensity_balance --simplex_color_balance
 ```
 
-## Support
+For other options, see the help:
+```
+iphigen -h
+```
 
-Please use [github issues](https://github.com/ofgulban/retinex_for_mri/issues) to report bugs or make suggestions.
+# Support
 
-## License
+Please use [github issues](https://github.com/ofgulban/iphigen/issues) to report bugs or make suggestions.
+
+# License
 
 The project is licensed under [GNU General Public License Version 3](http://www.gnu.org/licenses/gpl.html).
 
-## References
+# References
 
 This application is based on the following work:
 
 * Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997). A multiscale retinex for bridging the gap between color images and the human observation of scenes. IEEE Transactions on Image Processing, 6(7), 965–976. <http://doi.org/10.1109/83.597272>
 
 * Petro, A. B., Sbert, C., & Morel, J. (2014). Multiscale Retinex. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
+
+* Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011). Simplest Color Balance. Image Processing On Line, 1(1), 125–133. <http://doi.org/10.5201/ipol.2011.llmps-scb>
