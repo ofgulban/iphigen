@@ -57,6 +57,12 @@ def user_interface():
     cfg.color_balance = args.color_balance
     cfg.no_retinex = args.no_retinex
 
+    for f in cfg.filename:
+        if os.path.isfile(f):
+            pass
+        else:
+            raise ValueError('{} cannot be read.'.format(f))
+
     if cfg.out_dir:
         if os.path.isdir(cfg.out_dir):
             pass

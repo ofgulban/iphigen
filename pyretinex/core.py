@@ -125,6 +125,8 @@ def simplex_color_balance(bary, center=True, standardize=False,
                           trunc_max=False):
     """Compositional data based method for color balance.
 
+    Highly experimental!
+
     Parameters
     ----------
     bary: numpy.ndarray
