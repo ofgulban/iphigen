@@ -29,6 +29,9 @@ def main():
     """Process for nifti images."""
     user_interface()
     display_welcome_message()
+
+    raise ValueError('This part is not implemented.')
+
     print('Selected scales:\n  {}'.format(cfg.scales_nifti))
 
     # Load data
