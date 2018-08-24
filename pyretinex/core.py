@@ -1,4 +1,4 @@
-"""Multi scale retinex."""
+"""Core functions of pyretinex."""
 
 # Part of Pyretinex package.
 # Copyright (C) 2018  Omer Faruk Gulban
@@ -179,13 +179,10 @@ def simplex_color_balance(bary, center=True, standardize=False,
         correction = np.ones(anorm.shape)
         correction[idx_trunc] = truncation_power
         temp = coda.power(temp, correction[:, None])
-
     # TODO: Implement this similar to truncate and scpe function but for
     # simplex space. Proportion of dynamic range to the distance of between
     # aitchison norm percentiles gives the global scaling factor. This should
     # be done after truncation though.
-
-
 
     # Put back processed composition
     bary[mask] = temp

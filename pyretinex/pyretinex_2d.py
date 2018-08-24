@@ -29,7 +29,6 @@ def main():
     """Pyretinex for 2D images."""
     user_interface()
     display_welcome_message()
-    print('Selected scales:\n  {}'.format(cfg.scales))
 
     # Load data
     data, dirname, basename, ext = [], [], [], []
@@ -53,17 +52,23 @@ def main():
     # Compute barycentic coordinates (equivalent to intensity for 0-simplex)
     bary = data / inten[..., None]
 
-    # Appy multi-scale retinex on intensity
-    new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
-    # Scale back to the approximage original intensity range
-    new_inten = core.scale_approx(new_inten, inten)
+    if cfg.no_retinex:
+        id_ret = ''
+    else:
+        print('Selected retinex scales:\n  {}'.format(cfg.scales))
+        id_ret = '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
+        orig_inten = np.copy(inten)
+        # Appy multi-scale retinex on intensity
+        inten = core.multi_scale_retinex(inten, scales=cfg.scales)
+        # Scale back to the approximage original intensity range
+        inten = core.scale_approx(inten, orig_inten)
 
     #  Balance components if desired
     id_bal = ''
     if cfg.intensity_balance:
         print('Applying intensity balance...')
-        new_inten = utils.truncate_and_scale(
-            new_inten, percMin=1, percMax=99, zeroTo=255*data.shape[-1])
+        inten = utils.truncate_and_scale(inten, percMin=1, percMax=99,
+                                         zeroTo=255*data.shape[-1])
         id_bal = id_bal + '_IB'
     if cfg.color_balance:
         print('Applying color balance...')
@@ -71,13 +76,12 @@ def main():
         id_bal = id_bal + '_CB'
 
     # Insert back the processed intensity image
-    new_data = bary * new_inten[..., None]
+    new_data = bary * inten[..., None]
 
     print('Saving output(s)...')
-    id_scl = utils.prepare_scale_suffix(cfg.scales)
     for i in range(nr_fileinputs):
         # Generate output path
-        out_name = '{}_MSRBP{}{}'.format(basename[i], id_scl, id_bal)
+        out_name = '{}{}{}'.format(basename[i], id_ret, id_bal)
         out_basepath = os.path.join(dirname[i], out_name)
         out_path = out_basepath + os.extsep + ext[i]
         # Save 2D image

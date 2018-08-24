@@ -37,9 +37,14 @@ def user_interface():
         "--color_balance", action='store_true',
         help="Experimental, work in progress."
         )
+    parser.add_argument(
+        "--no_retinex", action='store_true',
+        help="Do not perform retinex image enhancement. Useful for diagnosis."
+        )
 
     args = parser.parse_args()
     cfg.filename = args.filename
     cfg.scales = args.scales
     cfg.intensity_balance = args.intensity_balance
     cfg.color_balance = args.color_balance
+    cfg.no_retinex = args.no_retinex
