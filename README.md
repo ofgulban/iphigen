@@ -4,9 +4,9 @@
 
 # Iphigen
 
-Provides a simple commandline interface for multi-scale retinex image enhancement and color balancing. It supports 3D images too, such as magnetic resonance (MR) images.
+A simple command-line interface for applying multi-scale retinex image enhancement and color balancing to 2D and 3D images.
 
-<img src="visuals/visual_01.png">
+<img src="visuals/visual_00.png">
 
 # Getting started
 
@@ -14,11 +14,12 @@ Provides a simple commandline interface for multi-scale retinex image enhancemen
 
 **[Python 3.6](https://www.python.org/downloads/release/python-363/)** or **[Python 2.7](https://www.python.org/download/releases/2.7/)** (compatible with both) and the following packages:
 
-| Package                              | Tested version |
-|--------------------------------------|----------------|
-| [NumPy](http://www.numpy.org/)       | 1.14.2         |
-| [SciPy](https://www.scipy.org/)      | 1.0.0          |
-| [NiBabel](http://nipy.org/nibabel/)  | 2.2.0          |
+| Package                               | Tested version |
+|---------------------------------------|----------------|
+| [imageio](https://imageio.github.io/) | 2.2.0          |
+| [SciPy](https://www.scipy.org/)       | 1.0.0          |
+| [NiBabel](http://nipy.org/nibabel/)   | 2.2.0          |
+| [NumPy](http://www.numpy.org/)        | 1.14.2         |
 
 ## Installation
 
@@ -27,34 +28,32 @@ Clone this repository or download the latest release. In your commandline, chang
 python setup.py install
 ```
 
-## Usage
-Apply retinex to an image with:
-```
-iphigen /path/to/image.png --retinex
-```
+## Use from command-line
+### Retinex with intensity balance
 <img src="visuals/visual_01.png">
-
-Intensity balance:
 ```
-iphigen_nifti /path/to/data.nii.gz --intensity_balance
+iphigen /path/to/image.png --retinex --intensity_balance
 ```
-<img src="visuals/visual_01.png">
 
-Color balance:
+### Color balance
+<img src="visuals/visual_02.png">
 ```
 iphigen_nifti /path/to/data.nii.gz --simplest_color_balance
 ```
-<img src="visuals/visual_01.png">
 
-Mix and match:
+### Retinex with simplest color balance
 ```
-iphigen /path/to/image.png --retinex --intensity_balance --simplex_color_balance
+iphigen_nifti /path/to/data.nii.gz --retinex --simplest_color_balance
 ```
-
+<img src="visuals/visual_03.png">
 For other options, see the help:
 ```
 iphigen -h
 ```
+
+## Use from python scripts
+
+TODO: Put back references to old (retinex_for_mri) examples.
 
 # Support
 
@@ -70,6 +69,6 @@ This application is based on the following work:
 
 * Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997). A multiscale retinex for bridging the gap between color images and the human observation of scenes. IEEE Transactions on Image Processing, 6(7), 965–976. <http://doi.org/10.1109/83.597272>
 
-* Petro, A. B., Sbert, C., & Morel, J. (2014). Multiscale Retinex. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
-
 * Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011). Simplest Color Balance. Image Processing On Line, 1(1), 125–133. <http://doi.org/10.5201/ipol.2011.llmps-scb>
+
+* Petro, A. B., Sbert, C., & Morel, J. (2014). Multiscale Retinex. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
