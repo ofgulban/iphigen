@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/retinex_for_mri.svg)](https://badge.fury.io/py/retinex_for_mri)
 
 
-# Iphigen
+# Iphigen (work in progress)
 
 A simple command-line interface for applying multi-scale retinex image enhancement and color balancing to 2D and 3D images.
 
@@ -27,31 +27,28 @@ Clone this repository or download the latest release. In your commandline, chang
 ```
 python setup.py install
 ```
+Typing ```iphigen -h``` in the comman-line should bring the help menu now.
 
-## Use from command-line
+## Usage
 ### Retinex with intensity balance
-<img src="visuals/visual_01.png">
 ```
 iphigen /path/to/image.png --retinex --intensity_balance
 ```
+<img src="visuals/visual_01.png">
 
 ### Color balance
-<img src="visuals/visual_02.png">
 ```
 iphigen_nifti /path/to/data.nii.gz --simplest_color_balance
 ```
+<img src="visuals/visual_02.png">
 
 ### Retinex with simplest color balance
 ```
 iphigen_nifti /path/to/data.nii.gz --retinex --simplest_color_balance
 ```
 <img src="visuals/visual_03.png">
-For other options, see the help:
-```
-iphigen -h
-```
 
-## Use from python scripts
+## Use within python scripts
 
 TODO: Put back references to old (retinex_for_mri) examples.
 
