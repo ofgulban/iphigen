@@ -73,7 +73,7 @@ def main():
     if cfg.retinex:
         print('Applying multi-scale retinex with barycenter preservation (MSRBP)...')
         print('  Selected scales: {}'.format(cfg.scales_nifti))
-        suf = suf + '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
+        suf = suf + '_MSRBP' + utils.prepare_scale_suffix(cfg.scales_nifti)
         new_inten = core.multi_scale_retinex(inten, scales=cfg.scales_nifti)
         # Scale back to the approximage original intensity range
         inten = core.scale_approx(new_inten, inten)

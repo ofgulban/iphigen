@@ -66,6 +66,7 @@ def user_interface():
     cfg.filename = args.filename
     cfg.out_dir = args.out_dir
     cfg.scales = args.scales
+    cfg.scales_nifti = args.scales
 
     cfg.retinex = args.retinex
     cfg.intensity_balance = args.intensity_balance
