@@ -38,15 +38,23 @@ iphigen /path/to/image.png --retinex --intensity_balance
 
 ### Color balance
 ```
-iphigen_nifti /path/to/data.nii.gz --simplest_color_balance
+iphigen /path/to/image.png --simplest_color_balance
 ```
 <img src="visuals/visual_02.png">
 
 ### Retinex with simplest color balance
 ```
-iphigen_nifti /path/to/data.nii.gz --retinex --simplest_color_balance
+iphigen /path/to/image.png --retinex --simplest_color_balance
 ```
 <img src="visuals/visual_03.png">
+
+## Use with Nifti files
+
+```
+iphigen_nifti /path/to/data.nii.gz --retinex
+```
+
+<img src="visuals/visual_mri_01.png">
 
 ## Use within python scripts
 
