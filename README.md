@@ -50,7 +50,7 @@ iphigen_nifti /path/to/data.nii.gz --retinex --simplest_color_balance
 
 ## Use within python scripts
 
-TODO: Put back references to old (retinex_for_mri) examples.
+See script examples [here](script_examples/).
 
 # Support
 
@@ -64,8 +64,8 @@ The project is licensed under [BSD-3-Clause](https://opensource.org/licenses/BSD
 
 This application is based on the following work:
 
-* Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997). A multiscale retinex for bridging the gap between color images and the human observation of scenes. IEEE Transactions on Image Processing, 6(7), 965–976. <http://doi.org/10.1109/83.597272>
+*   Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997). A multiscale retinex for bridging the gap between color images and the human observation of scenes. IEEE Transactions on Image Processing, 6(7), 965–976. <http://doi.org/10.1109/83.597272>
 
-* Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011). Simplest Color Balance. Image Processing On Line, 1(1), 125–133. <http://doi.org/10.5201/ipol.2011.llmps-scb>
+*   Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011). Simplest Color Balance. Image Processing On Line, 1(1), 125–133. <http://doi.org/10.5201/ipol.2011.llmps-scb>
 
-* Petro, A. B., Sbert, C., & Morel, J. (2014). Multiscale Retinex. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
+*   Petro, A. B., Sbert, C., & Morel, J. (2014). Multiscale Retinex. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
