@@ -11,7 +11,7 @@ nii = nb.load(input_path)
 data = nii.get_data()
 
 # Apply retinex
-new_data = multi_scale_retinex(data, scales=[1, 3, 10])
+new_data = multi_scale_retinex(data, scales=[15, 80, 250])
 
 # Scale the data to approximately the same range as before
 new_data = scale_approx(new_data, data)
