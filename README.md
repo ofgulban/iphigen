@@ -16,7 +16,7 @@ A simple command-line interface for applying multi-scale retinex image enhanceme
 
 | Package                               | Tested version |
 |---------------------------------------|----------------|
-| [imageio](https://imageio.github.io/) | 2.2.0          |
+| [OpenCV](https://opencv.org/)         | 3.4.4          |
 | [SciPy](https://www.scipy.org/)       | 1.0.0          |
 | [NiBabel](http://nipy.org/nibabel/)   | 2.2.0          |
 | [NumPy](http://www.numpy.org/)        | 1.14.2         |
@@ -58,7 +58,7 @@ Please use [github issues](https://github.com/ofgulban/iphigen/issues) to report
 
 # License
 
-The project is licensed under [GNU General Public License Version 3](http://www.gnu.org/licenses/gpl.html).
+The project is licensed under [BSD-3-Clause](https://opensource.org/licenses/BSD-3-Clause).
 
 # References
 

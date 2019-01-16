@@ -15,16 +15,16 @@ VERSION = '1.0.0'
 
 setup(name='iphigen',
       version=VERSION,
-      description='Retinex algorithm implemented for MRI data.',
+      description='Retinex & color balance algorithms for image enhancement.',
       url='https://github.com/ofgulban/retinex_for_mri',
       download_url=('https://github.com/ofgulban/retinex_for_mri/archive/'
                     + VERSION + '.tar.gz'),
       author='Omer Faruk Gulban',
       author_email='faruk.gulban@maastrichtuniversity.nl',
-      license='GNU General Public License Version 3',
+      license='BSD-3-Clause',
       packages=['iphigen'],
       install_requires=['numpy', 'scipy'],
-      keywords=['mri', 'retinex'],
+      keywords=['mri', 'retinex', 'color', 'color balance'],
       entry_points={'console_scripts': [
           'iphigen = iphigen.iphigen_2d:main',
           'iphigen_nifti = iphigen.iphigen_nifti:main']},
