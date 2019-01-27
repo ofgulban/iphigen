@@ -4,16 +4,16 @@ import os
 import numpy as np
 
 
-def truncate_range(data, percMin=0.25, percMax=99.75, discard_zeros=True):
+def truncate_range(data, pmin=0.25, pmax=99.75, discard_zeros=True):
     """Truncate too low and too high values.
 
     Parameters
     ----------
     data : np.ndarray
         Image to be truncated.
-    percMin : float
+    pmin : float
         Percentile minimum.
-    percMax : float
+    pmax : float
         Percentile maximum.
     discard_zeros : bool
         Discard voxels with value 0 from truncation.
@@ -25,9 +25,9 @@ def truncate_range(data, percMin=0.25, percMax=99.75, discard_zeros=True):
     """
     if discard_zeros:
         msk = ~np.isclose(data, 0)
-        pMin, pMax = np.nanpercentile(data[msk], [percMin, percMax])
+        pMin, pMax = np.nanpercentile(data[msk], [pmin, pmax])
     else:
-        pMin, pMax = np.nanpercentile(data, [percMin, percMax])
+        pMin, pMax = np.nanpercentile(data, [pmax, pmin])
     temp = data[~np.isnan(data)]
     temp[temp < pMin], temp[temp > pMax] = pMin, pMax  # truncate min and max
     data[~np.isnan(data)] = temp
