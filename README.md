@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/76043117.svg)](https://zenodo.org/badge/latestdoi/76043117)
-[![PyPI version](https://badge.fury.io/py/retinex_for_mri.svg)](https://badge.fury.io/py/retinex_for_mri)
+[![PyPI version](https://badge.fury.io/py/iphigen.svg)](https://badge.fury.io/py/iphigen)
 
 
 # Iphigen (work in progress)
