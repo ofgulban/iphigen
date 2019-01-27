@@ -2,3 +2,4 @@ opencv>=3.4
 nibabel>=2.2
 numpy>=1.15
 scipy>=1.2
+pytest-cov<2.6
