@@ -1,5 +1,6 @@
 """Test utility functions."""
 
+import pytest
 import numpy as np
 from iphigen.utils import truncate_range, scale_range, parse_filepath
 
@@ -25,13 +26,13 @@ def test_scale_range():
     data = np.random.random(100) - 0.5
     data.ravel()[np.random.choice(data.size, 10, replace=False)] = 0.
     data.ravel()[np.random.choice(data.size, 5, replace=False)] = np.nan
-    s = 255  # scaling factor
+    s = 255.  # scaling factor
     expected = [0., s]  # min and max
     # When
     output = scale_range(data, scale_factor=s, discard_zeros=False)
     # Then
-    assert all([np.nanmin(output) == expected[0],
-                np.nanmax(output) == expected[1]])
+    assert all([np.nanmin(output) == pytest.approx(expected[0]),
+                np.nanmax(output) == pytest.approx(expected[1])])
 
 
 def test_parse_filepath():
