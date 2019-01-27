@@ -3,4 +3,9 @@ source = iphigen
 
 omit =
     *__init__*
+    *__main__*
     *tests/*
+    *config*
+    ui.py
+    iphigen_2d.py
+    iphigen_nifti.py
