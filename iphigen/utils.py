@@ -36,16 +36,15 @@ def truncate_range(data, pmin=0.25, pmax=99.75, discard_zeros=True):
     return data
 
 
-def scale_range(data, scale_factor=255, discard_zeros=True):
+def set_range(data, zero_to=255, discard_zeros=True):
     """Scale values as a preprocessing step.
 
     Parameters
     ----------
     data : np.ndarray
         Image to be scaled.
-    scale_factor : float
-        Lower scaleFactors provides faster interface due to loweing the
-        resolution of 2D histogram ( 500 seems fast enough).
+    zero_to : float
+        TODO
     discard_zeros : bool
         Discard voxels with value 0 from truncation.
 
@@ -59,10 +58,10 @@ def scale_range(data, scale_factor=255, discard_zeros=True):
         msk = ~np.isclose(data, 0)
     else:
         msk = np.ones(data.shape, dtype=bool)
-    data[msk] = data[msk] - np.nanmin(data[msk])
-    data[msk] = scale_factor / np.nanmax(data[msk]) * data[msk]
+    data[msk] -= np.nanmin(data[msk])
+    data[msk] *= (zero_to / np.nanmax(data[msk]))
     if discard_zeros:
-        data[~msk] = 0  # put back masked out voxels
+        data[~msk] = 0  # put back masked out elements
     return data
 
 

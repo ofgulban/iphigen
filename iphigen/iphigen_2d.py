@@ -32,26 +32,28 @@ def main():
 
         suf = ''  # suffix
         if cfg.intensity_balance:
-            print('Applying intensity balance...')
+            print('Applying intensity balance (IB)...')
             print('  Percentiles: {}'.format(cfg.int_bal_perc))
             suf = suf + '_IB'
-            inten = utils.truncate_and_scale(
-                inten, pmin=cfg.int_bal_perc[0], pmax=cfg.int_bal_perc[1],
-                zero_to=255*data.shape[-1])
+            inten = utils.truncate_range(inten,
+                                         pmin=cfg.int_bal_perc[0],
+                                         pmax=cfg.int_bal_perc[1])
+            inten = utils.set_range(inten, zero_to=255*data.shape[-1])
+
             data = bary * inten[..., None]
             # Update barycentic coordinates
             bary = data / inten[..., None]
 
         if cfg.retinex:
-            print('Applying multi-scale retinex with color preservation (MSRCP)...')
+            print('Applying multi-scale retinex with barycenter preservation (MSRBP)...')
             print('  Selected retinex scales: {}'.format(cfg.scales))
-            suf = suf + '_MSRCP' + utils.prepare_scale_suffix(cfg.scales)
+            suf = suf + '_MSRBP' + utils.prepare_scale_suffix(cfg.scales)
             new_inten = core.multi_scale_retinex(inten, scales=cfg.scales)
             # Scale back to the approximage original intensity range
             inten = core.scale_approx(new_inten, inten)
 
         if cfg.simplex_color_balance:
-            print('Applying simplex color balance...')
+            print('Applying simplex color balance (SimplexCB)...')
             print('  Centering: {}'.format(cfg.simplex_center))
             print('  Standardize: {}'.format(cfg.simplex_standardize))
             suf = suf + '_SimplexCB'
@@ -63,7 +65,7 @@ def main():
         data = bary * inten[..., None]
 
         if cfg.simplest_color_balance:
-            print('Applying simplest color balance...')
+            print('Applying simplest color balance (SimplestCB)...')
             print('  Percentiles: {}'.format(cfg.int_bal_perc))
             suf = suf + '_SimplestCB'
             data = core.simplest_color_balance(
