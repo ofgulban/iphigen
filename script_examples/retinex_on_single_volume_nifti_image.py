@@ -2,7 +2,6 @@
 
 import os
 import nibabel as nb
-
 from iphigen.core import multi_scale_retinex, scale_approx
 
 # Load nifti image
