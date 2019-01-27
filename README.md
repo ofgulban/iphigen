@@ -17,9 +17,9 @@ A simple command-line interface for applying multi-scale retinex image enhanceme
 | Package                               | Tested version |
 |---------------------------------------|----------------|
 | [OpenCV](https://opencv.org/)         | 3.4.4          |
-| [SciPy](https://www.scipy.org/)       | 1.0.0          |
-| [NiBabel](http://nipy.org/nibabel/)   | 2.2.0          |
-| [NumPy](http://www.numpy.org/)        | 1.14.2         |
+| [SciPy](https://www.scipy.org/)       | 1.2.0          |
+| [NiBabel](http://nipy.org/nibabel/)   | 2.2.1          |
+| [NumPy](http://www.numpy.org/)        | 1.15.4         |
 
 ## Installation
 

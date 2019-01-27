@@ -1,4 +1,4 @@
 opencv>=3.4
-nibabel>=2.2.1
-numpy>=1.14.2
-scipy>=1.1.0
+nibabel>=2.2
+numpy>=1.15
+scipy>=1.2
