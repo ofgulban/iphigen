@@ -1,0 +1,6 @@
+[run]
+source = iphigen
+
+omit =
+    *__init__*
+    *tests/*
