@@ -5,7 +5,7 @@ import time
 import numpy as np
 import compoda.core as coda
 from scipy.ndimage import gaussian_filter
-from iphigen.utils import truncate_and_scale
+from iphigen.utils import truncate_range, scale_range
 np.seterr(divide='ignore', invalid='ignore')
 
 
@@ -105,8 +105,8 @@ def simplest_color_balance(image, pmin=1., pmax=99.):
     """
     dims = image.shape
     for d in range(dims[-1]):
-        image[..., d] = truncate_and_scale(
-            image[..., d], pmin=pmin, pmax=pmax, zero_to=255)
+        image[..., d] = truncate_range(image[..., d], pmin=pmin, pmax=pmax)
+        image[..., d] = scale_range(image[..., d], scale_factor=255)
     return image
 
 

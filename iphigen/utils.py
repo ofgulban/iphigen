@@ -4,34 +4,66 @@ import os
 import numpy as np
 
 
-def truncate_and_scale(data, pmin=2.5, pmax=97.5, zero_to=255):
-    """Truncate and scale the data as a preprocessing step.
+def truncate_range(data, percMin=0.25, percMax=99.75, discard_zeros=True):
+    """Truncate too low and too high values.
 
     Parameters
     ----------
-    data : nd numpy array
-        Data/image to be truncated and scaled.
-    pmin : float, positive
-        Minimum percentile to be truncated.
-    pmax : float, positive
-        Maximum percentile to be truncated.
-    zero_to : float
-        Data will be returned in the range from 0 to this number.
+    data : np.ndarray
+        Image to be truncated.
+    percMin : float
+        Percentile minimum.
+    percMax : float
+        Percentile maximum.
+    discard_zeros : bool
+        Discard voxels with value 0 from truncation.
 
     Returns
     -------
-    data : nd numpy array
-        Truncated and scaled data/image.
+    data : np.ndarray
 
     """
-    # adjust minimum
-    pmin, pmax = np.nanpercentile(data, [pmin, pmax])
-    data[np.where(data < pmin)] = pmin
-    data[np.where(data > pmax)] = pmax
-    data = data - np.nanmin(data)
-    # adjust maximum
-    data = (1. / np.nanmax(data)) * data
-    return data * zero_to
+    if discard_zeros:
+        msk = ~np.isclose(data, 0)
+        pMin, pMax = np.nanpercentile(data[msk], [percMin, percMax])
+    else:
+        pMin, pMax = np.nanpercentile(data, [percMin, percMax])
+    temp = data[~np.isnan(data)]
+    temp[temp < pMin], temp[temp > pMax] = pMin, pMax  # truncate min and max
+    data[~np.isnan(data)] = temp
+    if discard_zeros:
+        data[~msk] = 0  # put back masked out voxels
+    return data
+
+
+def scale_range(data, scale_factor=255, discard_zeros=True):
+    """Scale values as a preprocessing step.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        Image to be scaled.
+    scale_factor : float
+        Lower scaleFactors provides faster interface due to loweing the
+        resolution of 2D histogram ( 500 seems fast enough).
+    discard_zeros : bool
+        Discard voxels with value 0 from truncation.
+
+    Returns
+    -------
+    data: np.ndarray
+        Scaled image.
+
+    """
+    if discard_zeros:
+        msk = ~np.isclose(data, 0)
+    else:
+        msk = np.ones(data.shape, dtype=bool)
+    data[msk] = data[msk] - np.nanmin(data[msk])
+    data[msk] = scale_factor / np.nanmax(data[msk]) * data[msk]
+    if discard_zeros:
+        data[~msk] = 0  # put back masked out voxels
+    return data
 
 
 def parse_filepath(filepath):
