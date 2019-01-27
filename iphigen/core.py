@@ -21,6 +21,9 @@ def multi_scale_retinex(image, scales=None, verbose=True):
         information see [1]. More or less than 3 values can be given.
         Disscussion of how to determine/optimize the scale values can
         be found in [2].
+    verbose: bool
+        Print intermediate information. Useful to track progress when
+        processing large images.
 
     Returns
     -------
@@ -89,7 +92,9 @@ def simplest_color_balance(image, pmin=1., pmax=99.):
     image: ndim numpy array
         Last dimension should contain channels (eg. RGB)
     pmin: float
+        Percent minimum.
     pmax: float
+        Percent maximum.
 
     Reference
     ---------
@@ -116,6 +121,15 @@ def simplex_color_balance(bary, center=True, standardize=False,
     bary: numpy.ndarray
         Barycentric coordinates. Sum of all channels should add up to 1
         (closed).
+    center: bool
+        Center barycentric coordinates (similar to de-meaning). Single-hue
+        dominated images will be balanced to cover all hues.
+    standardize: bool
+        Standardize barycentric coordinates. Standardized compositions make
+        better use of the simplex space dynamic range.
+    trunc_max: bool
+        Truncate maximum barycentric coordinates to eliminate extreme hues that
+        are not prevalent in the image.
 
     Returns
     -------
