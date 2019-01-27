@@ -4,7 +4,12 @@
 
 # Iphigen (work in progress)
 
-A simple command-line interface for applying multi-scale retinex image enhancement and color balancing to 2D and 3D images.
+A simple command-line interface for image enhancement and color balancing.
+
+This application is being developed mainly to play with a few algorithms that I like. I am aiming at making the implementations work for 2D, 3D and 4D images. Currently implemented algorithms are:
+- __Multi-scale retinex__ [1, 3]
+- __Simplest color balance__ [2]
+- __Simplex color balance__ (based on [3, 4], not published)
 
 <img src="visuals/visual_00.png">
 
@@ -12,7 +17,7 @@ A simple command-line interface for applying multi-scale retinex image enhanceme
 
 ## Dependencies
 
-**[Python 3.6](https://www.python.org/downloads/release/python-363/)** or **[Python 2.7](https://www.python.org/download/releases/2.7/)** (compatible with both) and the following packages:
+**[Python 3](https://www.python.org/)** and the following packages:
 
 | Package                               | Tested version |
 |---------------------------------------|----------------|
@@ -23,11 +28,11 @@ A simple command-line interface for applying multi-scale retinex image enhanceme
 
 ## Installation
 
-Clone this repository or download the latest release. In your commandline, change directory to folder of this package and run the following on your command line:
+Clone this repository or download the latest release. In your command line, change directory to folder of this package and run the following:
 ```
 python setup.py install
 ```
-Typing ```iphigen -h``` in the comman-line should bring the help menu now.
+If everything went fine, typing ```iphigen -h``` or ```iphigen_nifti -h``` in the command-line should show the help menu now.
 
 ## Usage
 ### Retinex with intensity balance
@@ -72,8 +77,10 @@ The project is licensed under [BSD-3-Clause](https://opensource.org/licenses/BSD
 
 This application is based on the following work:
 
-*   Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997). A multiscale retinex for bridging the gap between color images and the human observation of scenes. IEEE Transactions on Image Processing, 6(7), 965–976. <http://doi.org/10.1109/83.597272>
+1.  Jobson, D. J., Rahman, Z. U., & Woodell, G. A. (1997). _A multiscale retinex for bridging the gap between color images and the human observation of scenes._ IEEE Transactions on Image Processing, 6(7), 965–976. <http://doi.org/10.1109/83.597272>
 
-*   Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011). Simplest Color Balance. Image Processing On Line, 1(1), 125–133. <http://doi.org/10.5201/ipol.2011.llmps-scb>
+2.  Limare, N., Lisani, J., Morel, J., Petro, A. B., & Sbert, C. (2011). _Simplest Color Balance_. Image Processing On Line, 1(1), 125–133. <http://doi.org/10.5201/ipol.2011.llmps-scb>
 
-*   Petro, A. B., Sbert, C., & Morel, J. (2014). Multiscale Retinex. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
+3.  Petro, A. B., Sbert, C., & Morel, J. (2014). _Multiscale Retinex_. Image Processing On Line, 4, 71–88. <http://doi.org/10.5201/ipol.2014.107>
+
+4.  Gulban, O. F. (2018). _The Relation between Color Spaces and Compositional Data Analysis Demonstrated with Magnetic Resonance Image Processing Applications._ Austrian Journal of Statistics, 47(5), 34–46. <http://doi.org/10.17713/ajs.v47i5.743>
