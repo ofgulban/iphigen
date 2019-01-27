@@ -16,8 +16,8 @@ VERSION = '1.0.0'
 setup(name='iphigen',
       version=VERSION,
       description='Retinex & color balance algorithms for image enhancement.',
-      url='https://github.com/ofgulban/retinex_for_mri',
-      download_url=('https://github.com/ofgulban/retinex_for_mri/archive/'
+      url='https://github.com/ofgulban/iphigen',
+      download_url=('https://github.com/ofgulban/iphigen/archive/'
                     + VERSION + '.tar.gz'),
       author='Omer Faruk Gulban',
       author_email='faruk.gulban@maastrichtuniversity.nl',
