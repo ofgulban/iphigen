@@ -25,11 +25,12 @@ def truncate_range(data, pmin=0.25, pmax=99.75, discard_zeros=True):
     """
     if discard_zeros:
         msk = ~np.isclose(data, 0)
-        pMin, pMax = np.nanpercentile(data[msk], [pmin, pmax])
+        thr_min, thr_max = np.nanpercentile(data[msk], [pmin, pmax])
     else:
-        pMin, pMax = np.nanpercentile(data, [pmax, pmin])
+        thr_min, thr_max = np.nanpercentile(data, [pmin, pmax])
     temp = data[~np.isnan(data)]
-    temp[temp < pMin], temp[temp > pMax] = pMin, pMax  # truncate min and max
+    # truncate min and max
+    temp[temp < thr_min], temp[temp > thr_max] = thr_min, thr_max
     data[~np.isnan(data)] = temp
     if discard_zeros:
         data[~msk] = 0  # put back masked out voxels
