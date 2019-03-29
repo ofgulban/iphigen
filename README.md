@@ -1,6 +1,6 @@
 [![DOI](https://zenodo.org/badge/76043117.svg)](https://zenodo.org/badge/latestdoi/76043117)
 [![PyPI version](https://badge.fury.io/py/iphigen.svg)](https://badge.fury.io/py/iphigen)
-
+[![HitCount](http://hits.dwyl.io/ofgulban/compoda.svg)](http://hits.dwyl.io/ofgulban/compoda)
 
 # Iphigen (work in progress)
 
