@@ -74,7 +74,7 @@ def main():
 
     if cfg.simplest_color_balance:
         print('Applying simplest color balance...')
-        print('  Percentiles: {}'.format(cfg.int_bal_perc))
+        print('  Percentiles: {}'.format(cfg.simplest_perc))
         suf = suf + '_SimplestCB'
         data = core.simplest_color_balance(
             data, pmin=cfg.simplest_perc[0], pmax=cfg.simplest_perc[1])
