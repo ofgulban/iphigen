@@ -47,9 +47,12 @@ def main():
         # print('Applying intensity balance...')
         # print('  Percentiles: {}'.format(cfg.int_bal_perc))
         # suf = suf + '_IB'
-        # inten = utils.truncate_and_scale(
-        #     inten, pmin=cfg.int_bal_perc[0], pmax=cfg.int_bal_perc[1],
-        #     zero_to=255*data.shape[-1])
+        #
+        # inten = utils.truncate_range(inten,
+        #                              pmin=cfg.int_bal_perc[0],
+        #                              pmax=cfg.int_bal_perc[1])
+        # inten = utils.set_range(inten, zero_to=255*data.shape[-1])
+        #
         # data = bary * inten[..., None]
         # # Update barycentic coordinates
         # bary = data / inten[..., None]
